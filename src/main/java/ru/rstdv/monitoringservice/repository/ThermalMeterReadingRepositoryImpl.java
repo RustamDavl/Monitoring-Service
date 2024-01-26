@@ -8,14 +8,14 @@ import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import java.util.List;
 import java.util.Optional;
 
-public class ThermalMeterRepositoryImpl implements ThermalMeterRepository {
-    private static final ThermalMeterRepositoryImpl INSTANCE = new ThermalMeterRepositoryImpl();
+public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository<ThermalMeterReading> {
+    private static final ThermalMeterReadingRepositoryImpl INSTANCE = new ThermalMeterReadingRepositoryImpl();
     private static final DataBaseTable<ThermalMeterReading> THERMAL_METER_TABLE = new DataBaseTable<>();
 
-    private ThermalMeterRepositoryImpl() {
+    private ThermalMeterReadingRepositoryImpl() {
     }
 
-    public static ThermalMeterRepositoryImpl getInstance() {
+    public static ThermalMeterReadingRepositoryImpl getInstance() {
         return INSTANCE;
     }
 

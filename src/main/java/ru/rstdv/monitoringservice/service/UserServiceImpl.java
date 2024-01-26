@@ -4,6 +4,7 @@ import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.mapper.UserMapper;
+import ru.rstdv.monitoringservice.mapper.UserMapperImpl;
 import ru.rstdv.monitoringservice.repository.UserRepository;
 import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
 
@@ -11,8 +12,8 @@ import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
 public class UserServiceImpl implements UserService {
 
 
-    private static final UserRepository userRepositoryImpl = UserRepositoryImpl.getInstance();
-    private static final UserMapper userMapper = UserMapper.getInstance();
+    private final UserRepository userRepositoryImpl = UserRepositoryImpl.getInstance();
+    private final UserMapper userMapperImpl = UserMapperImpl.getInstance();
     private static final UserServiceImpl INSTANCE = new UserServiceImpl();
 
     private UserServiceImpl() {
@@ -23,17 +24,17 @@ public class UserServiceImpl implements UserService {
     }
 
     public ReadUserDto register(CreateUpdateUserDto createUpdateUserDto) {
-        var savedUser = userRepositoryImpl.save(userMapper.toUser(createUpdateUserDto));
-        return userMapper.toReadUserDto(savedUser);
+        var savedUser = userRepositoryImpl.save(userMapperImpl.toUser(createUpdateUserDto));
+        return userMapperImpl.toReadUserDto(savedUser);
 
     }
 
     public ReadUserDto authenticate(String email, String password) {
         var maybeUser = userRepositoryImpl.findByEmailAndPassword(email, password)
                 .orElseThrow(
-                        () -> new UserNotFoundException("there is no user with such email and password")
+                        () -> new UserNotFoundException("bad credentials")
                 );
-        return userMapper.toReadUserDto(maybeUser);
+        return userMapperImpl.toReadUserDto(maybeUser);
 
     }
 }

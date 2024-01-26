@@ -4,18 +4,21 @@ import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadi
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
+import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
+import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
-import ru.rstdv.monitoringservice.service.ThermalMeterService;
+import ru.rstdv.monitoringservice.service.MeterReadingService;
+import ru.rstdv.monitoringservice.service.ThermalMeterReadingServiceImpl;
 import ru.rstdv.monitoringservice.service.UserServiceImpl;
-import ru.rstdv.monitoringservice.service.WaterMeterService;
+import ru.rstdv.monitoringservice.service.WaterMeterReadingServiceImpl;
 
 import java.util.Scanner;
 
 public class ConsoleApplication {
 
     private final UserServiceImpl userServiceImpl = UserServiceImpl.getInstance();
-    private final WaterMeterService waterMeterService = WaterMeterService.getInstance();
-    private final ThermalMeterService thermalMeterService = ThermalMeterService.getInstance();
+    private final MeterReadingService<ReadWaterMeterReadingDto, CreateUpdateWaterMeterReadingDto> waterMeterReadingServiceImpl = WaterMeterReadingServiceImpl.getInstance();
+    private final MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> thermalMeterReadingServiceImpl = ThermalMeterReadingServiceImpl.getInstance();
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
@@ -82,31 +85,31 @@ public class ConsoleApplication {
                             System.out.println("горячей воды");
                             var hotValue = scanner.nextLine();
                             CreateUpdateWaterMeterReadingDto createUpdateWaterMeterReadingDto = new CreateUpdateWaterMeterReadingDto(user.id(), coldValue, hotValue);
-                            var res = waterMeterService.create(createUpdateWaterMeterReadingDto);
+                            var res = waterMeterReadingServiceImpl.save(createUpdateWaterMeterReadingDto);
                             System.out.println(res);
 
                         } else if (answer.equals("2")) {
                             System.out.println("Введите значение в Гкал");
                             var value = scanner.nextLine();
                             CreateUpdateThermalMeterReadingDto createUpdateThermalMeterReadingDto = new CreateUpdateThermalMeterReadingDto(user.id(), value);
-                            var res = thermalMeterService.create(createUpdateThermalMeterReadingDto);
+                            var res = thermalMeterReadingServiceImpl.save(createUpdateThermalMeterReadingDto);
                             System.out.println(res);
                         } else if (answer.equals("3")) {
-                            var res = thermalMeterService.getActual();
+                            var res = thermalMeterReadingServiceImpl.findActual();
                             System.out.println(res);
                         } else if (answer.equals("4")) {
-                            var res = waterMeterService.getActual();
+                            var res = waterMeterReadingServiceImpl.findActual();
                             System.out.println(res);
                         }else if (answer.equals("5")) {
-                            var res = thermalMeterService.getAll();
+                            var res = thermalMeterReadingServiceImpl.findAll();
                             System.out.println(res);
                         } else if (answer.equals("6")) {
-                            var res = waterMeterService.getActual();
+                            var res = waterMeterReadingServiceImpl.findActual();
                             System.out.println(res);
                         }else if (answer.equals("7")) {
                             System.out.println("Введите номер месяца");
                             var monthValue = scanner.nextLine();
-                            var res = thermalMeterService.getByFilter(new MonthFilter(Integer.valueOf(monthValue)));
+                            var res = thermalMeterReadingServiceImpl.findByFilter(new MonthFilter(Integer.valueOf(monthValue)));
                             System.out.println(res);
                         }else if (answer.equals("8")) {
                             System.out.println("Введите номер месяца");

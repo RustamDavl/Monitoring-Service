@@ -1,20 +1,17 @@
 package ru.rstdv.monitoringservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Data
-public class ThermalMeterReading {
+
+
+
+@Getter
+@SuperBuilder
+public class ThermalMeterReading extends MeterReading{
 
     private Long id;
-    private User user;
-    private LocalDateTime dateOfMeterReading;
     private Float gigaCalories;
 }

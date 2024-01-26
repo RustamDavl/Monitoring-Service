@@ -1,21 +1,17 @@
 package ru.rstdv.monitoringservice.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+
+@SuperBuilder
 @Data
-public class WaterMeterReading {
+public class WaterMeterReading extends MeterReading {
 
     private Long id;
-
-    private User user;
-
-    private LocalDateTime dateOfMeterReading;
 
     private Integer coldWater;
 
