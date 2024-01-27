@@ -20,8 +20,12 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public ReadUserDto toReadUserDto(User user) {
-        return new ReadUserDto(user.getId().toString(), user.getFirstname(), user.getEmail(),
-                user.getAddress(), user.getPersonalAccount()
+        return new ReadUserDto(user.getId().toString(),
+                user.getFirstname(),
+                user.getEmail(),
+                user.getAddress(),
+                user.getRole().name(),
+                user.getPersonalAccount()
         );
     }
 

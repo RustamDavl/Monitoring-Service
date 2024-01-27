@@ -1,6 +1,6 @@
 package ru.rstdv.monitoringservice.repository;
 
-import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
+import ru.rstdv.monitoringservice.dto.filter.Filter;
 import ru.rstdv.monitoringservice.entity.MeterReading;
 
 import java.util.List;
@@ -10,9 +10,9 @@ public interface MeterReadingRepository <T extends MeterReading> {
 
     T save(T thermalMeterReading);
 
-    Optional<T> findActual();
+    Optional<T> findActualByUserId(Long id);
 
-    List<T> findAll();
+    List<T> findAllByUserId(Long id);
 
-    Optional<T> findByFilter(MonthFilter monthFilter);
+    Optional<T> findByMonthAndUserId(Filter filter, Long id);
 }

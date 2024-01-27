@@ -6,7 +6,7 @@ import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.User;
 
 public interface ThermalMeterMapper {
-    ReadThermalMeterReadingDto toReadWaterMeterReadingDto(ThermalMeterReading thermalMeterReading);
+    ReadThermalMeterReadingDto toReadThermalMeterReadingDto(ThermalMeterReading thermalMeterReading);
 
 
     ThermalMeterReading toThermalMeterReading(CreateUpdateThermalMeterReadingDto createUpdateThermalMeterReadingDto, User user);

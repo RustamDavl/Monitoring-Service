@@ -19,7 +19,7 @@ public class ThermalMeterMapperImpl implements ThermalMeterMapper {
     private final UserMapperImpl userMapperImpl = UserMapperImpl.getInstance();
 
     @Override
-    public ReadThermalMeterReadingDto toReadWaterMeterReadingDto(ThermalMeterReading thermalMeterReading) {
+    public ReadThermalMeterReadingDto toReadThermalMeterReadingDto(ThermalMeterReading thermalMeterReading) {
         return new ReadThermalMeterReadingDto(
                 thermalMeterReading.getId().toString(),
                 userMapperImpl.toReadUserDto(

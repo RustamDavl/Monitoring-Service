@@ -20,7 +20,8 @@ public class User {
     private String email;
     private String password;
     private String personalAccount;
-    private Role role;
+    @Builder.Default
+    private Role role = Role.USER;
     private Address address;
 
 }
