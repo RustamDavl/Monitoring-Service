@@ -9,7 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * класс предоставляет элементарные операции базы данных. будет удален при внедрении в проект JDBC API.
+ *
+ * @param <T> представляет определенную сущность, которая сохраняется в базе данных
+ * @author RustamD
+ * @version 1.0
+ */
 public class DataBaseTable<T> {
 
     @Getter

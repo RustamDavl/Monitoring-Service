@@ -8,6 +8,12 @@ import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 
 import java.time.LocalDateTime;
 
+/**
+ * сущность аудита, сохраняемая в таблицу базы данных
+ *
+ * @author RustamD
+ * @version 1.0
+ */
 @Data
 @Builder
 @AllArgsConstructor

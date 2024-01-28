@@ -7,6 +7,9 @@ import ru.rstdv.monitoringservice.entity.embeddable.Role;
 import ru.rstdv.monitoringservice.repository.UserRepository;
 import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
 
+/**
+ * класс необходим для заполнения базы данных информацией до начала взаимодействия с консольным приложением.
+ */
 @UtilityClass
 public class AdminPlaceholder {
 

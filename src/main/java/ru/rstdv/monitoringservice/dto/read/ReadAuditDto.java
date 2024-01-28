@@ -9,6 +9,8 @@ package ru.rstdv.monitoringservice.dto.read;
  * @param auditDateTime время аудита
  * @param auditAction   действие аудита
  * @param description   дополнительное описание действия
+ * @author RustamD
+ * @version 1.0
  */
 public record ReadAuditDto(String id,
                            ReadUserDto readUserDto,

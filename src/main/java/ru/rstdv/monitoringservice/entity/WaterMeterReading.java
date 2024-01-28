@@ -5,10 +5,15 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-
-
+/**
+ * сущность показания счетчика воды, сохраняемая в таблицу базы данных
+ *
+ * @author RustamD
+ * @version 1.0
+ */
+@Getter
 @SuperBuilder
-@Data
+@Setter
 public class WaterMeterReading extends MeterReading {
 
     private Long id;

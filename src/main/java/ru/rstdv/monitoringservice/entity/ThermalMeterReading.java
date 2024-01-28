@@ -5,9 +5,12 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-
-
-
+/**
+ * сущность показания счетчика тепла, сохраняемая в таблицу базы данных
+ *
+ * @author RustamD
+ * @version 1.0
+ */
 @Getter
 @SuperBuilder
 @Setter

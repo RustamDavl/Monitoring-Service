@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
  * @param auditAction   действие, произведенное пользователем
  * @param auditDateTime время создания аудита
  * @param description   дополнительное описание действий
+ * @author RustamD
+ * @version 1.0
  */
 public record CreateAuditDto(
         String userId,

@@ -1,5 +1,11 @@
 package ru.rstdv.monitoringservice.entity.embeddable;
 
+/**
+ * перечисление, представляющее действие пользователя для сохранения в аудите
+ *
+ * @author RustamD
+ * @version 1.0
+ */
 public enum AuditAction {
     REGISTRATION,
     AUTHENTICATION,

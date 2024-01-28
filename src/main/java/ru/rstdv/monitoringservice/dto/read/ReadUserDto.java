@@ -12,6 +12,8 @@ import ru.rstdv.monitoringservice.entity.embeddable.Role;
  * @param address         адрес
  * @param role            роль
  * @param personalAccount лицевой счет
+ * @author RustamD
+ * @version 1.0
  */
 public record ReadUserDto(
         String id,

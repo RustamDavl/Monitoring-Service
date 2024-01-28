@@ -5,6 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * встариваемый класс, представляющий адрес пользователя с полями : город, улица и номера дома
+ *
+ * @author RustamD
+ * @version 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

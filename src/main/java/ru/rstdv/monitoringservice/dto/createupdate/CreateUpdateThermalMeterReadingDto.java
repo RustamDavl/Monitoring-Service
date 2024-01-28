@@ -5,6 +5,8 @@ package ru.rstdv.monitoringservice.dto.createupdate;
  *
  * @param userId       идентификатор пользователя
  * @param gigaCalories показание в Гкал
+ * @author RustamD
+ * @version 1.0
  */
 public record CreateUpdateThermalMeterReadingDto(String userId, String gigaCalories) {
 }

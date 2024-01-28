@@ -7,6 +7,8 @@ package ru.rstdv.monitoringservice.dto.read;
  * @param readUserDto        отображение пользователя
  * @param gigaCalories       значение в Гкал
  * @param dateOfMeterReading дата внесения показания
+ * @author RustamD
+ * @version 1.0
  */
 public record ReadThermalMeterReadingDto(
         String id,
