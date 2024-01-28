@@ -1,6 +1,6 @@
 package ru.rstdv.monitoringservice.repository;
 
-import ru.rstdv.monitoringservice.dto.filter.Filter;
+import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
 import ru.rstdv.monitoringservice.entity.MeterReading;
 import ru.rstdv.monitoringservice.util.DataBaseTable;
 
@@ -22,6 +22,9 @@ public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository
         return INSTANCE;
     }
 
+    public static void clearDataBase() {
+        THERMAL_METER_TABLE.clear();
+    }
     @Override
     public ThermalMeterReading save(ThermalMeterReading thermalMeterReading) {
         return THERMAL_METER_TABLE.INSERT(thermalMeterReading);
@@ -34,6 +37,7 @@ public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository
                 .filter(thermalMeterReading -> Objects.equals(thermalMeterReading.getUser().getId(), id))
                 .sorted(Comparator.comparing(MeterReading::getDateOfMeterReading, Comparator.reverseOrder()))
                 .toList();
+
         if (actualThermalMeterReadings.isEmpty())
             return Optional.empty();
 
@@ -49,14 +53,21 @@ public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository
     }
 
     @Override
-    public Optional<ThermalMeterReading> findByMonthAndUserId(Filter filter, Long id) {
+    public Optional<ThermalMeterReading> findByMonthAndUserId(MonthFilter monthFilter, Long id) {
         var list = THERMAL_METER_TABLE.GET_ALL().stream()
+                .filter(thermalMeterReading -> thermalMeterReading.getDateOfMeterReading().getMonthValue() == monthFilter.getMonthNumber())
                 .filter(thermalMeterReading -> Objects.equals(thermalMeterReading.getUser().getId(), id))
-                .filter(thermalMeterReading -> thermalMeterReading.getDateOfMeterReading().getMonthValue() == filter.getMonthNumber())
                 .toList();
         if (list.isEmpty())
             return Optional.empty();
 
         return Optional.ofNullable(list.get(0));
     }
+    @Override
+    public List<ThermalMeterReading> findAll() {
+        return THERMAL_METER_TABLE.GET_ALL();
+    }
+
+
+
 }

@@ -5,11 +5,25 @@ import ru.rstdv.monitoringservice.entity.Audit;
 
 import java.util.List;
 
-
+/**
+ * интерфейс AuditRepository предназначен для аудита действий пользователя
+ * @author RustamD
+ * @version 1.0
+ */
 public interface AuditRepository {
+
+    /**
+     * @param userId - идентификатор пользователя
+     * @return - возвращает список типа Audit, который содержит информацию о пользователе и его действие
+     */
 
     List<Audit> findUserAudits(Long userId);
 
+    /**
+     * метод сохраняет объект типа Audit
+     *
+     * @param audit - объект аудита
+     */
     void saveAudit(Audit audit);
 
 }

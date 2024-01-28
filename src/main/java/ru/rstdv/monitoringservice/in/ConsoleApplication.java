@@ -4,11 +4,15 @@ package ru.rstdv.monitoringservice.in;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
-import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
+import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
+import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
+import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFound;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
+import ru.rstdv.monitoringservice.mapper.*;
+import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.service.*;
 import ru.rstdv.monitoringservice.util.AdminPlaceholder;
 
@@ -16,11 +20,30 @@ import java.util.Scanner;
 
 public class ConsoleApplication {
 
-    private final UserServiceImpl userServiceImpl = UserServiceImpl.getInstance();
-    private final MeterReadingService<ReadWaterMeterReadingDto, CreateUpdateWaterMeterReadingDto> waterMeterReadingServiceImpl = WaterMeterReadingServiceImpl.getInstance();
-    private final MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> thermalMeterReadingServiceImpl = ThermalMeterReadingServiceImpl.getInstance();
+    private final UserRepository userRepository = UserRepositoryImpl.getInstance();
 
-    private final AuditService auditServiceImpl = AuditServiceImpl.getInstance();
+    private final MeterReadingRepository<WaterMeterReading> waterMeterReadingRepository = WaterMeterReadingRepositoryImpl.getInstance();
+    private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository = ThermalMeterReadingRepositoryImpl.getInstance();
+    private final UserMapper userMapper = UserMapperImpl.getInstance();
+    private final AuditMapper auditMapper = AuditMapperImpl.getInstance();
+    private final WaterMeterMapper waterMeterMapper = WaterMeterMapperImpl.getInstance();
+    private final ThermalMeterMapper thermalMeterMapper = ThermalMeterMapperImpl.getInstance();
+    private final AuditRepository auditRepository = AuditRepositoryImpl.getInstance();
+    private final AuditService auditServiceImpl = new AuditServiceImpl(auditRepository, auditMapper, userRepository);
+    private final UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, userMapper, auditServiceImpl);
+    private final MeterReadingService<ReadWaterMeterReadingDto, CreateUpdateWaterMeterReadingDto> waterMeterReadingServiceImpl = new WaterMeterReadingServiceImpl(
+            waterMeterReadingRepository,
+            userRepository,
+            waterMeterMapper,
+            auditServiceImpl
+    );
+    private final MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> thermalMeterReadingServiceImpl = new ThermalMeterReadingServiceImpl(
+            thermalMeterReadingRepository,
+            userRepository,
+            thermalMeterMapper,
+            auditServiceImpl
+    );
+
 
     public void start() {
         AdminPlaceholder.addAdmin();
@@ -142,7 +165,7 @@ public class ConsoleApplication {
                                 System.out.println("Введите номер месяца");
                                 var monthValue = scanner.nextLine();
                                 try {
-                                    var res = thermalMeterReadingServiceImpl.findByMonth(new MonthFilter(Integer.parseInt(monthValue)));
+                                    var res = thermalMeterReadingServiceImpl.findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
                                     System.out.println(res);
 
                                 } catch (MeterReadingNotFound e) {
@@ -152,7 +175,7 @@ public class ConsoleApplication {
                                 System.out.println("Введите номер месяца");
                                 var monthValue = scanner.nextLine();
                                 try {
-                                    var res = waterMeterReadingServiceImpl.findByMonth(new MonthFilter(Integer.parseInt(monthValue)));
+                                    var res = waterMeterReadingServiceImpl.findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
                                     System.out.println(res);
 
                                 } catch (MeterReadingNotFound e) {

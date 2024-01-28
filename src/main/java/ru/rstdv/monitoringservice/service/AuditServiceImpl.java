@@ -1,5 +1,6 @@
 package ru.rstdv.monitoringservice.service;
 
+import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.read.ReadAuditDto;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
@@ -12,19 +13,21 @@ import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
-    private final AuditRepository auditRepositoryImpl = AuditRepositoryImpl.getInstance();
-    private final AuditMapper auditMapperImpl = AuditMapperImpl.getInstance();
-    private final UserRepository userRepositoryImpl = UserRepositoryImpl.getInstance();
-    private static final AuditServiceImpl INSTANCE = new AuditServiceImpl();
 
-
-    private AuditServiceImpl() {
-    }
-
-    public static AuditServiceImpl getInstance() {
-        return INSTANCE;
-    }
+    private final AuditRepository auditRepositoryImpl; //= AuditRepositoryImpl.getInstance();
+    private final AuditMapper auditMapperImpl; // = AuditMapperImpl.getInstance();
+    private final UserRepository userRepositoryImpl; // = UserRepositoryImpl.getInstance();
+//    private static final AuditServiceImpl INSTANCE = new AuditServiceImpl();
+//
+//
+//    private AuditServiceImpl() {
+//    }
+//
+//    public static AuditServiceImpl getInstance() {
+//        return INSTANCE;
+//    }
 
     @Override
     public List<ReadAuditDto> findUserAudits(String userId) {

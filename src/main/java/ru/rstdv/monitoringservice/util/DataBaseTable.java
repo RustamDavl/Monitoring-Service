@@ -36,10 +36,6 @@ public class DataBaseTable<T> {
         return entityWithId;
     }
 
-    public T GET_LAST() {
-        return fields.get(sequence - 1);
-    }
-
     public List<T> GET_ALL() {
         return fields.values().stream().toList();
     }
@@ -64,6 +60,11 @@ public class DataBaseTable<T> {
                     return entity;
                 }).toList()
                 .get(0);
+    }
+
+    public void clear() {
+        sequence = 1L;
+        fields.clear();
     }
 
 }

@@ -1,6 +1,5 @@
 package ru.rstdv.monitoringservice.repository;
 
-import ru.rstdv.monitoringservice.dto.filter.Filter;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
 import ru.rstdv.monitoringservice.entity.MeterReading;
 import ru.rstdv.monitoringservice.util.DataBaseTable;
@@ -23,6 +22,9 @@ public class WaterMeterReadingRepositoryImpl implements MeterReadingRepository<W
         return INSTANCE;
     }
 
+    public static void clearDataBase() {
+        WATER_METER_TABLE.clear();
+    }
     @Override
     public WaterMeterReading save(WaterMeterReading waterMeterReading) {
         return WATER_METER_TABLE.INSERT(waterMeterReading);
@@ -49,15 +51,19 @@ public class WaterMeterReadingRepositoryImpl implements MeterReadingRepository<W
     }
 
     @Override
-    public Optional<WaterMeterReading> findByMonthAndUserId(Filter filter, Long id) {
+    public Optional<WaterMeterReading> findByMonthAndUserId(MonthFilter monthFilter, Long id) {
         var list = WATER_METER_TABLE.GET_ALL().stream()
                 .filter(waterMeterReading -> Objects.equals(waterMeterReading.getUser().getId(), id))
-                .filter(thermalMeterReading -> thermalMeterReading.getDateOfMeterReading().getMonthValue() == filter.getMonthNumber())
+                .filter(thermalMeterReading -> thermalMeterReading.getDateOfMeterReading().getMonthValue() == monthFilter.getMonthNumber())
                 .toList();
         if (list.isEmpty())
             return Optional.empty();
 
         return Optional.ofNullable(list.get(0));
+    }
+    @Override
+    public List<WaterMeterReading> findAll() {
+        return WATER_METER_TABLE.GET_ALL();
     }
 
 }

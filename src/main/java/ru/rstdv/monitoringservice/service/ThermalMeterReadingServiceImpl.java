@@ -1,39 +1,38 @@
 package ru.rstdv.monitoringservice.service;
 
+import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadingDto;
-import ru.rstdv.monitoringservice.dto.filter.Filter;
+import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFound;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.mapper.ThermalMeterMapper;
-import ru.rstdv.monitoringservice.mapper.ThermalMeterMapperImpl;
 import ru.rstdv.monitoringservice.repository.MeterReadingRepository;
-import ru.rstdv.monitoringservice.repository.ThermalMeterReadingRepositoryImpl;
 import ru.rstdv.monitoringservice.repository.UserRepository;
-import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> {
 
-    private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepositoryImpl = ThermalMeterReadingRepositoryImpl.getInstance();
-    private final UserRepository userRepositoryImpl = UserRepositoryImpl.getInstance();
-    private final ThermalMeterMapper thermalMeterMapperImpl = ThermalMeterMapperImpl.getInstance();
+    private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepositoryImpl;// = ThermalMeterReadingRepositoryImpl.getInstance();
+    private final UserRepository userRepositoryImpl;// = UserRepositoryImpl.getInstance();
+    private final ThermalMeterMapper thermalMeterMapperImpl;// = ThermalMeterMapperImpl.getInstance();
 
-    private final AuditService auditServiceImpl = AuditServiceImpl.getInstance();
-    private static final ThermalMeterReadingServiceImpl INSTANCE = new ThermalMeterReadingServiceImpl();
+    private final AuditService auditServiceImpl; // = AuditServiceImpl.getInstance();
+//    private static final ThermalMeterReadingServiceImpl INSTANCE = new ThermalMeterReadingServiceImpl();
+//
+//    private ThermalMeterReadingServiceImpl() {
+//    }
 
-    private ThermalMeterReadingServiceImpl() {
-    }
-
-    public static ThermalMeterReadingServiceImpl getInstance() {
-        return INSTANCE;
-    }
+//    public static ThermalMeterReadingServiceImpl getInstance() {
+//        return INSTANCE;
+//    }
 
     @Override
     public ReadThermalMeterReadingDto save(CreateUpdateThermalMeterReadingDto object) {
@@ -84,10 +83,18 @@ public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadT
     }
 
     @Override
-    public ReadThermalMeterReadingDto findByMonthAndUserId(Filter filter, Long id) {
-        return thermalMeterReadingRepositoryImpl.findByMonthAndUserId(filter, id)
+    public ReadThermalMeterReadingDto findByMonthAndUserId(MonthFilter monthFilter, Long id) {
+        return thermalMeterReadingRepositoryImpl.findByMonthAndUserId(monthFilter, id)
                 .map(thermalMeterMapperImpl::toReadThermalMeterReadingDto)
-                .orElseThrow(() -> new MeterReadingNotFound("there is no any meter reading in " + Month.of(filter.getMonthNumber()).name()));
+                .orElseThrow(() -> new MeterReadingNotFound("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
 
+    }
+
+    @Override
+    public List<ReadThermalMeterReadingDto> findAll() {
+        return thermalMeterReadingRepositoryImpl.findAll()
+                .stream()
+                .map(thermalMeterMapperImpl::toReadThermalMeterReadingDto)
+                .toList();
     }
 }

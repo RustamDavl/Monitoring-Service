@@ -8,6 +8,7 @@ import ru.rstdv.monitoringservice.entity.User;
 import java.util.List;
 import java.util.Optional;
 
+
 public class UserRepositoryImpl implements UserRepository {
     private static final UserRepository INSTANCE = new UserRepositoryImpl();
     private static final DataBaseTable<User> USER_TABLE = new DataBaseTable<>();
@@ -17,6 +18,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     public static UserRepository getInstance() {
         return INSTANCE;
+    }
+
+    public static void clearDataBase() {
+        USER_TABLE.clear();
     }
 
     @Override
@@ -39,6 +44,17 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByEmail(String email) {
+        var maybeUser = USER_TABLE.GET_ALL()
+                .stream()
+                .filter(user -> user.getEmail().equals(email))
+                .toList();
+        if (maybeUser.isEmpty())
+            return Optional.empty();
+        return Optional.of(maybeUser.get(0));
+    }
+
+    @Override
     public Optional<User> findByEmailAndPassword(String email, String password) {
         var maybeUserList = USER_TABLE.GET_ALL()
                 .stream()
@@ -48,7 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
         if (maybeUserList.isEmpty())
             return Optional.empty();
 
-        return Optional.ofNullable(maybeUserList.get(0));
+        return Optional.of(maybeUserList.get(0));
     }
 
 

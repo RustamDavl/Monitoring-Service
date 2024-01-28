@@ -1,11 +1,13 @@
 package ru.rstdv.monitoringservice.util;
 
+import lombok.experimental.UtilityClass;
 import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.embeddable.Address;
 import ru.rstdv.monitoringservice.entity.embeddable.Role;
 import ru.rstdv.monitoringservice.repository.UserRepository;
 import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
 
+@UtilityClass
 public class AdminPlaceholder {
 
     private static final UserRepository userRepositoryImpl = UserRepositoryImpl.getInstance();

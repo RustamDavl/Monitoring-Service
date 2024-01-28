@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class AuditRepositoryImpl implements AuditRepository {
-
-    private final UserRepository userRepositoryImpl = UserRepositoryImpl.getInstance();
     private static final AuditRepositoryImpl INSTANCE = new AuditRepositoryImpl();
     private static final DataBaseTable<Audit> AUDIT_TABLE = new DataBaseTable<>();
 
@@ -21,6 +19,9 @@ public class AuditRepositoryImpl implements AuditRepository {
         return INSTANCE;
     }
 
+    public static void clearDataBase() {
+        AUDIT_TABLE.clear();
+    }
     @Override
     public List<Audit> findUserAudits(Long userId) {
         return AUDIT_TABLE.GET_ALL().stream()

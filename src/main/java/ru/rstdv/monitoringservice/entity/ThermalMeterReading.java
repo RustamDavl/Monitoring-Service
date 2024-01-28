@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @SuperBuilder
+@Setter
 public class ThermalMeterReading extends MeterReading{
 
     private Long id;
