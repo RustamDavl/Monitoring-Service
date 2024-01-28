@@ -10,7 +10,7 @@ Monitoring-Service - это сервис, для отправки показан
 - Просмотра истории подачи показаний.
 
 ## Использование
-- gin clone https://github.com/RustamDavl/Monitoring-Service
+- gin clone https://github.com/RustamDavl/Monitoring-Service.git
 
 ## Технологии
 * Java core(collection api)
