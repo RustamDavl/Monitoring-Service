@@ -1,8 +1,7 @@
 package ru.rstdv.monitoringservice.unit.repository;
 
-import org.assertj.core.api.Assertions;
+
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.entity.Audit;
 import ru.rstdv.monitoringservice.entity.User;

@@ -5,6 +5,8 @@ import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.User;
 
+import java.time.LocalDateTime;
+
 public class ThermalMeterMapperImpl implements ThermalMeterMapper {
 
     private static final ThermalMeterMapperImpl INSTANCE = new ThermalMeterMapperImpl();
@@ -34,6 +36,7 @@ public class ThermalMeterMapperImpl implements ThermalMeterMapper {
     public ThermalMeterReading toThermalMeterReading(CreateUpdateThermalMeterReadingDto createUpdateThermalMeterReadingDto, User user) {
         return ThermalMeterReading.builder()
                 .user(user)
+                .dateOfMeterReading(LocalDateTime.now())
                 .gigaCalories(Float.valueOf(createUpdateThermalMeterReadingDto.gigaCalories()))
                 .build();
     }

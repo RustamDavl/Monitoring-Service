@@ -7,6 +7,7 @@ import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
 import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
+import ru.rstdv.monitoringservice.exception.IncorrectMonthValueException;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFound;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.mapper.WaterMeterMapper;
@@ -20,19 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWaterMeterReadingDto, CreateUpdateWaterMeterReadingDto> {
 
-    private final MeterReadingRepository<WaterMeterReading> waterMeterReadingRepositoryImpl;// = WaterMeterReadingRepositoryImpl.getInstance();
-    private final UserRepository userRepositoryImpl;// = UserRepositoryImpl.getInstance();
-    private final WaterMeterMapper waterMeterMapperImpl;// = WaterMeterMapperImpl.getInstance();
+    private final MeterReadingRepository<WaterMeterReading> waterMeterReadingRepositoryImpl;
+    private final UserRepository userRepositoryImpl;
+    private final WaterMeterMapper waterMeterMapperImpl;
+    private final AuditService auditServiceImpl;
 
-    private final AuditService auditServiceImpl;// = AuditServiceImpl.getInstance();
-//    private static final WaterMeterReadingServiceImpl INSTANCE = new WaterMeterReadingServiceImpl();
-//
-//    private WaterMeterReadingServiceImpl() {
-//    }
-//
-//    public static WaterMeterReadingServiceImpl getInstance() {
-//        return INSTANCE;
-//    }
 
     @Override
     public ReadWaterMeterReadingDto save(CreateUpdateWaterMeterReadingDto object) {
@@ -79,9 +72,10 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
                 .stream()
                 .map(waterMeterMapperImpl::toReadWaterMeterReadingDto)
                 .toList();
+
         auditServiceImpl.saveAudit(new CreateAuditDto(
                 id.toString(),
-                AuditAction.WATER_METER_READING_SENDING.name(),
+                AuditAction.GET_WATER_READING_HISTORY.name(),
                 LocalDateTime.now(),
                 "get all water meter readings of user " + id
         ));
@@ -90,9 +84,22 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
 
     @Override
     public ReadWaterMeterReadingDto findByMonthAndUserId(MonthFilter monthFilter, Long id) {
-        return waterMeterReadingRepositoryImpl.findByMonthAndUserId(monthFilter, id)
+        if (!isMonthValueCorrect(monthFilter.getMonthNumber()))
+            throw new IncorrectMonthValueException("month value must be between [1, 12] but your value is : " + monthFilter.getMonthNumber());
+
+        var list = waterMeterReadingRepositoryImpl.findByMonthAndUserId(monthFilter, id)
                 .map(waterMeterMapperImpl::toReadWaterMeterReadingDto)
                 .orElseThrow(() -> new MeterReadingNotFound("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
+
+        auditServiceImpl.saveAudit(
+                new CreateAuditDto(
+                        id.toString(),
+                        AuditAction.GET_WATER_READING_BY_MONTH.name(),
+                        LocalDateTime.now(),
+                        "user got water meter reading by month : " + Month.of(monthFilter.getMonthNumber())
+                )
+        );
+        return list;
     }
 
     @Override
@@ -101,6 +108,10 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
                 .stream()
                 .map(waterMeterMapperImpl::toReadWaterMeterReadingDto)
                 .toList();
+    }
+
+    private boolean isMonthValueCorrect(int value) {
+        return value >= 1 && value <= 12;
     }
 
 

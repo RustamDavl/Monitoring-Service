@@ -53,4 +53,5 @@ public interface MeterReadingService<R, C> {
      * @return - список всех показаний, переаваемых пользователю
      */
     List<R> findAll();
+
 }

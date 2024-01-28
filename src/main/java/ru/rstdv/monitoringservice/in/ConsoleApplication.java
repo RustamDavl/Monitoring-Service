@@ -1,14 +1,18 @@
 package ru.rstdv.monitoringservice.in;
 
 
+import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
+import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
 import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
+import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
+import ru.rstdv.monitoringservice.exception.IncorrectMonthValueException;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFound;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.mapper.*;
@@ -16,6 +20,7 @@ import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.service.*;
 import ru.rstdv.monitoringservice.util.AdminPlaceholder;
 
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class ConsoleApplication {
@@ -107,19 +112,23 @@ public class ConsoleApplication {
                             } else if (answer.equals("2")) {
                                 System.out.println("Введите идентификатор пользователя");
                                 var id = scanner.nextLine();
-                                var readUserDto = userServiceImpl.findById(Long.valueOf(id));
-                                var audits = auditServiceImpl.findUserAudits(readUserDto.id());
-                                System.out.println("User : ");
-                                System.out.println(readUserDto);
-                                System.out.println("User audits");
-                                audits.forEach(System.out::println);
+
+                                try {
+                                    ReadUserDto readUserDto = readUserDto = userServiceImpl.findById(Long.valueOf(id));
+                                    var audits = auditServiceImpl.findUserAudits(readUserDto.id());
+                                    System.out.println("User : ");
+                                    System.out.println(readUserDto);
+                                    System.out.println("User audits");
+                                    audits.forEach(System.out::println);
+                                } catch (UserNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                }
                             }
 
 
                         } while (!answer.equalsIgnoreCase("Q"));
                     } else if (user.role().equals("USER")) {
                         String answer = null;
-
                         do {
                             System.out.println("Выберите одно из действий : ");
                             System.out.println();
@@ -140,21 +149,37 @@ public class ConsoleApplication {
                                 System.out.println("горячей воды");
                                 var hotValue = scanner.nextLine();
                                 CreateUpdateWaterMeterReadingDto createUpdateWaterMeterReadingDto = new CreateUpdateWaterMeterReadingDto(user.id(), coldValue, hotValue);
-                                var res = waterMeterReadingServiceImpl.save(createUpdateWaterMeterReadingDto);
-                                System.out.println(res);
-
+                                try {
+                                    var res = waterMeterReadingServiceImpl.save(createUpdateWaterMeterReadingDto);
+                                    System.out.println(res);
+                                } catch (UserNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                }
                             } else if (answer.equals("2")) {
                                 System.out.println("Введите значение в Гкал");
                                 var value = scanner.nextLine();
                                 CreateUpdateThermalMeterReadingDto createUpdateThermalMeterReadingDto = new CreateUpdateThermalMeterReadingDto(user.id(), value);
-                                var res = thermalMeterReadingServiceImpl.save(createUpdateThermalMeterReadingDto);
-                                System.out.println(res);
+                                try {
+                                    var res = thermalMeterReadingServiceImpl.save(createUpdateThermalMeterReadingDto);
+                                    System.out.println(res);
+                                } catch (UserNotFoundException e) {
+                                    System.out.println(e.getMessage());
+                                }
                             } else if (answer.equals("3")) {
-                                var res = thermalMeterReadingServiceImpl.findActualByUserId(Long.valueOf(user.id()));
-                                System.out.println(res);
+                                try {
+                                    var res = thermalMeterReadingServiceImpl.findActualByUserId(Long.valueOf(user.id()));
+                                    System.out.println(res);
+                                } catch (MeterReadingNotFound e) {
+                                    System.out.println(e.getMessage());
+                                }
+
                             } else if (answer.equals("4")) {
-                                var res = waterMeterReadingServiceImpl.findActualByUserId(Long.valueOf(user.id()));
-                                System.out.println(res);
+                                try {
+                                    var res = waterMeterReadingServiceImpl.findActualByUserId(Long.valueOf(user.id()));
+                                    System.out.println(res);
+                                } catch (MeterReadingNotFound e) {
+                                    System.out.println(e.getMessage());
+                                }
                             } else if (answer.equals("5")) {
                                 var res = thermalMeterReadingServiceImpl.findAllByUserId(Long.valueOf(user.id()));
                                 System.out.println(res);
@@ -168,7 +193,7 @@ public class ConsoleApplication {
                                     var res = thermalMeterReadingServiceImpl.findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
                                     System.out.println(res);
 
-                                } catch (MeterReadingNotFound e) {
+                                } catch (MeterReadingNotFound | IncorrectMonthValueException e) {
                                     System.out.println(e.getMessage());
                                 }
                             } else if (answer.equals("8")) {
@@ -178,12 +203,19 @@ public class ConsoleApplication {
                                     var res = waterMeterReadingServiceImpl.findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
                                     System.out.println(res);
 
-                                } catch (MeterReadingNotFound e) {
+                                } catch (MeterReadingNotFound | IncorrectMonthValueException e) {
                                     System.out.println(e.getMessage());
                                 }
                             }
 
+
                         } while (!answer.equalsIgnoreCase("Q"));
+                        auditServiceImpl.saveAudit(new CreateAuditDto(
+                                user.id(),
+                                AuditAction.LOGOUT.name(),
+                                LocalDateTime.now(),
+                                "user log out"
+                        ));
                     }
 
                 } catch (UserNotFoundException e) {
@@ -192,7 +224,13 @@ public class ConsoleApplication {
                 }
 
 
+            } else if (choice.equalsIgnoreCase("Q")) {
+                break;
+
+            } else {
+                System.out.println("Неверная команда?");
             }
         }
+        scanner.close();
     }
 }
