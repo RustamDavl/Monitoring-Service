@@ -13,7 +13,7 @@ import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.exception.IncorrectMonthValueException;
-import ru.rstdv.monitoringservice.exception.MeterReadingNotFound;
+import ru.rstdv.monitoringservice.exception.MeterReadingNotFoundException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.mapper.*;
 import ru.rstdv.monitoringservice.repository.*;
@@ -169,7 +169,7 @@ public class ConsoleApplication {
                                 try {
                                     var res = thermalMeterReadingServiceImpl.findActualByUserId(Long.valueOf(user.id()));
                                     System.out.println(res);
-                                } catch (MeterReadingNotFound e) {
+                                } catch (MeterReadingNotFoundException e) {
                                     System.out.println(e.getMessage());
                                 }
 
@@ -177,7 +177,7 @@ public class ConsoleApplication {
                                 try {
                                     var res = waterMeterReadingServiceImpl.findActualByUserId(Long.valueOf(user.id()));
                                     System.out.println(res);
-                                } catch (MeterReadingNotFound e) {
+                                } catch (MeterReadingNotFoundException e) {
                                     System.out.println(e.getMessage());
                                 }
                             } else if (answer.equals("5")) {
@@ -193,7 +193,7 @@ public class ConsoleApplication {
                                     var res = thermalMeterReadingServiceImpl.findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
                                     System.out.println(res);
 
-                                } catch (MeterReadingNotFound | IncorrectMonthValueException e) {
+                                } catch (MeterReadingNotFoundException | IncorrectMonthValueException e) {
                                     System.out.println(e.getMessage());
                                 }
                             } else if (answer.equals("8")) {
@@ -203,7 +203,7 @@ public class ConsoleApplication {
                                     var res = waterMeterReadingServiceImpl.findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
                                     System.out.println(res);
 
-                                } catch (MeterReadingNotFound | IncorrectMonthValueException e) {
+                                } catch (MeterReadingNotFoundException | IncorrectMonthValueException e) {
                                     System.out.println(e.getMessage());
                                 }
                             }

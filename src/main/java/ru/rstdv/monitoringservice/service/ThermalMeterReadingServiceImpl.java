@@ -8,7 +8,7 @@ import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.exception.IncorrectMonthValueException;
-import ru.rstdv.monitoringservice.exception.MeterReadingNotFound;
+import ru.rstdv.monitoringservice.exception.MeterReadingNotFoundException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.mapper.ThermalMeterMapper;
 import ru.rstdv.monitoringservice.repository.MeterReadingRepository;
@@ -54,7 +54,7 @@ public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadT
     @Override
     public ReadThermalMeterReadingDto findActualByUserId(Long id) {
         var maybeThermalMeter = thermalMeterReadingRepositoryImpl.findActualByUserId(id)
-                .orElseThrow(() -> new MeterReadingNotFound("there is no any meter readings"));
+                .orElseThrow(() -> new MeterReadingNotFoundException("there is no any meter readings"));
 
         auditServiceImpl.saveAudit(new CreateAuditDto(
                 id.toString(),
@@ -88,7 +88,7 @@ public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadT
             throw new IncorrectMonthValueException("month value must be between [1, 12] but your value is : " + monthFilter.getMonthNumber());
         var list = thermalMeterReadingRepositoryImpl.findByMonthAndUserId(monthFilter, id)
                 .map(thermalMeterMapperImpl::toReadThermalMeterReadingDto)
-                .orElseThrow(() -> new MeterReadingNotFound("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
+                .orElseThrow(() -> new MeterReadingNotFoundException("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
 
         auditServiceImpl.saveAudit(
                 new CreateAuditDto(

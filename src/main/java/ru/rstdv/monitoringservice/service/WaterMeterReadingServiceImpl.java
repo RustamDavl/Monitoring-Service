@@ -8,7 +8,7 @@ import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.exception.IncorrectMonthValueException;
-import ru.rstdv.monitoringservice.exception.MeterReadingNotFound;
+import ru.rstdv.monitoringservice.exception.MeterReadingNotFoundException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.mapper.WaterMeterMapper;
 import ru.rstdv.monitoringservice.repository.MeterReadingRepository;
@@ -89,7 +89,7 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
 
         var list = waterMeterReadingRepositoryImpl.findByMonthAndUserId(monthFilter, id)
                 .map(waterMeterMapperImpl::toReadWaterMeterReadingDto)
-                .orElseThrow(() -> new MeterReadingNotFound("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
+                .orElseThrow(() -> new MeterReadingNotFoundException("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
 
         auditServiceImpl.saveAudit(
                 new CreateAuditDto(

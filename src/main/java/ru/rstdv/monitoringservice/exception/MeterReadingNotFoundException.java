@@ -3,8 +3,8 @@ package ru.rstdv.monitoringservice.exception;
 /**
  * исключение, которое выбрасывается при ненайденном показании
  */
-public class MeterReadingNotFound extends RuntimeException {
-    public MeterReadingNotFound(String message) {
+public class MeterReadingNotFoundException extends RuntimeException {
+    public MeterReadingNotFoundException(String message) {
         super(message);
     }
 }

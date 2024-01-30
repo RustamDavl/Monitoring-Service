@@ -1,28 +1,21 @@
 package ru.rstdv.monitoringservice.mapper;
 
+import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 
+@RequiredArgsConstructor
 public class WaterMeterMapperImpl implements WaterMeterMapper {
 
-    private static final WaterMeterMapperImpl INSTANCE = new WaterMeterMapperImpl();
-
-    private WaterMeterMapperImpl() {
-    }
-
-    public static WaterMeterMapperImpl getInstance() {
-        return INSTANCE;
-    }
-
-    private final UserMapperImpl userMapperImpl = UserMapperImpl.getInstance();
+    private final UserMapper userMapper;
 
     @Override
     public ReadWaterMeterReadingDto toReadWaterMeterReadingDto(WaterMeterReading waterMeterReading) {
         return new ReadWaterMeterReadingDto(
                 waterMeterReading.getId().toString(),
-                userMapperImpl.toReadUserDto(
+                userMapper.toReadUserDto(
                         waterMeterReading.getUser()
                 ),
                 waterMeterReading.getColdWater().toString(),

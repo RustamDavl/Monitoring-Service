@@ -1,5 +1,6 @@
 package ru.rstdv.monitoringservice.mapper;
 
+import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.read.ReadAuditDto;
 import ru.rstdv.monitoringservice.entity.Audit;
@@ -8,24 +9,16 @@ import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 
 import java.time.LocalDateTime;
 
+@RequiredArgsConstructor
 public class AuditMapperImpl implements AuditMapper {
 
-    private final UserMapper userMapperImpl = UserMapperImpl.getInstance();
-
-    private static final AuditMapperImpl INSTANCE = new AuditMapperImpl();
-
-    private AuditMapperImpl() {
-    }
-
-    public static AuditMapperImpl getInstance() {
-        return INSTANCE;
-    }
+    private final UserMapper userMapper;
 
     @Override
     public ReadAuditDto toReadAuditDto(Audit audit) {
         return new ReadAuditDto(
                 audit.getId().toString(),
-                userMapperImpl.toReadUserDto(
+                userMapper.toReadUserDto(
                         audit.getUser()
                 ),
                 audit.getAuditDateTime().toString(),
