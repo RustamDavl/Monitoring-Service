@@ -8,16 +8,6 @@ import ru.rstdv.monitoringservice.entity.embeddable.Role;
 
 public class UserMapperImpl implements UserMapper {
 
-    private static final UserMapperImpl INSTANCE = new UserMapperImpl();
-
-    private UserMapperImpl() {
-    }
-
-
-    public static UserMapperImpl getInstance() {
-        return INSTANCE;
-    }
-
     @Override
     public ReadUserDto toReadUserDto(User user) {
         return new ReadUserDto(user.getId().toString(),

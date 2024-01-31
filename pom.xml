@@ -16,6 +16,7 @@
         <org.projectlombok.version>1.18.30</org.projectlombok.version>
         <org.mockito.version>4.11.0</org.mockito.version>
         <org.assertj.version>3.23.1</org.assertj.version>
+        <org.posgresql.version>42.6.0</org.posgresql.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
@@ -58,6 +59,12 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${org.assertj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${org.posgresql.version}</version>
         </dependency>
     </dependencies>
 

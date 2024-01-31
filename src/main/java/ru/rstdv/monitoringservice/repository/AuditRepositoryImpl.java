@@ -11,7 +11,6 @@ public class AuditRepositoryImpl implements AuditRepository {
     private static final AuditRepositoryImpl INSTANCE = new AuditRepositoryImpl();
     private static final DataBaseTable<Audit> AUDIT_TABLE = new DataBaseTable<>();
 
-
     private AuditRepositoryImpl() {
     }
 
@@ -22,6 +21,7 @@ public class AuditRepositoryImpl implements AuditRepository {
     public static void clearDataBase() {
         AUDIT_TABLE.clear();
     }
+
     @Override
     public List<Audit> findUserAudits(Long userId) {
         return AUDIT_TABLE.GET_ALL().stream()

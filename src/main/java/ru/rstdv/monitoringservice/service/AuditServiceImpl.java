@@ -16,18 +16,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
 
-    private final AuditRepository auditRepositoryImpl; //= AuditRepositoryImpl.getInstance();
-    private final AuditMapper auditMapperImpl; // = AuditMapperImpl.getInstance();
-    private final UserRepository userRepositoryImpl; // = UserRepositoryImpl.getInstance();
-//    private static final AuditServiceImpl INSTANCE = new AuditServiceImpl();
-//
-//
-//    private AuditServiceImpl() {
-//    }
-//
-//    public static AuditServiceImpl getInstance() {
-//        return INSTANCE;
-//    }
+    private final AuditRepository auditRepositoryImpl;
+    private final AuditMapper auditMapperImpl;
+    private final UserRepository userRepositoryImpl;
 
     @Override
     public List<ReadAuditDto> findUserAudits(String userId) {

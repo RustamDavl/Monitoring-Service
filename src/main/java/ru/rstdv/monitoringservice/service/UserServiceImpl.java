@@ -21,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-
     private final UserRepository userRepositoryImpl;
     private final UserMapper userMapperImpl;
     private final AuditService auditServiceImpl;
@@ -56,7 +55,6 @@ public class UserServiceImpl implements UserService {
                 "user authenticated successfully"
         ));
         return userMapperImpl.toReadUserDto(maybeUser);
-
     }
 
     @Override

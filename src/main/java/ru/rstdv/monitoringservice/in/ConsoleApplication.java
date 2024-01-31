@@ -26,13 +26,12 @@ import java.util.Scanner;
 public class ConsoleApplication {
 
     private final UserRepository userRepository = UserRepositoryImpl.getInstance();
-
     private final MeterReadingRepository<WaterMeterReading> waterMeterReadingRepository = WaterMeterReadingRepositoryImpl.getInstance();
     private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository = ThermalMeterReadingRepositoryImpl.getInstance();
-    private final UserMapper userMapper = UserMapperImpl.getInstance();
-    private final AuditMapper auditMapper = AuditMapperImpl.getInstance();
-    private final WaterMeterMapper waterMeterMapper = WaterMeterMapperImpl.getInstance();
-    private final ThermalMeterMapper thermalMeterMapper = ThermalMeterMapperImpl.getInstance();
+    private final UserMapper userMapper = new UserMapperImpl();
+    private final AuditMapper auditMapper = new AuditMapperImpl(userMapper);
+    private final WaterMeterMapper waterMeterMapper = new WaterMeterMapperImpl(userMapper);
+    private final ThermalMeterMapper thermalMeterMapper = new ThermalMeterMapperImpl(userMapper);
     private final AuditRepository auditRepository = AuditRepositoryImpl.getInstance();
     private final AuditService auditServiceImpl = new AuditServiceImpl(auditRepository, auditMapper, userRepository);
     private final UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, userMapper, auditServiceImpl);
