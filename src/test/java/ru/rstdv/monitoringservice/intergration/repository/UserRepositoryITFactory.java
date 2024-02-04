@@ -18,7 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class UserRepositoryIT extends IntegrationTestBase {
+public class UserRepositoryITFactory extends IntegrationTestBase {
     private UserRepository userRepository;
 
     @BeforeEach

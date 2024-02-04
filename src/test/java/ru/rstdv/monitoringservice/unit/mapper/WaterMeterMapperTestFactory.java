@@ -14,7 +14,7 @@ import java.time.Year;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WaterMeterMapperTest {
+public class WaterMeterMapperTestFactory {
 
     private WaterMeterMapper waterMeterMapper;
 

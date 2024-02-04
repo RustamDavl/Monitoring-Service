@@ -11,7 +11,6 @@ public class ConnectionUtil {
     private final String PASSWORD_KEY = "db.password";
     private final String URL_KEY = "db.url";
     private final String USERNAME_KEY = "db.username";
-
     public Connection getConnection() {
         try {
             return DriverManager.getConnection(

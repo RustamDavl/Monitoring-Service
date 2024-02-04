@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
-public class ThermalMeterReadingServiceTest {
+public class ThermalMeterReadingServiceTestFactory {
     @Mock
     private UserRepository userRepositoryImpl;
     @Mock

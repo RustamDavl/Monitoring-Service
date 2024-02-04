@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class AuditServiceIT extends IntegrationTestBase {
+public class AuditServiceITFactory extends IntegrationTestBase {
 
     private AuditService auditService;
     private AuditRepository auditRepository;
@@ -46,10 +46,10 @@ public class AuditServiceIT extends IntegrationTestBase {
         auditRepository = new AuditRepositoryImpl(testConnectionProvider);
         userMapper = new UserMapperImpl();
         userRepository = new UserRepositoryImpl(testConnectionProvider);
-        auditMapper = new AuditMapperImpl(userMapper);
+        auditMapper = new AuditMapperImpl();
         auditService = new AuditServiceImpl(auditRepository, auditMapper, userRepository);
         userRepository = new UserRepositoryImpl(testConnectionProvider);
-        auditService = new AuditServiceImpl(auditRepository, new AuditMapperImpl(userMapper), userRepository);
+        auditService = new AuditServiceImpl(auditRepository, new AuditMapperImpl(), userRepository);
 
     }
 

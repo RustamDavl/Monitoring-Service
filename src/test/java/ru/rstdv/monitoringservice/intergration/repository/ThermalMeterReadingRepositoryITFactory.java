@@ -20,7 +20,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ThermalMeterReadingRepositoryIT extends IntegrationTestBase {
+public class ThermalMeterReadingRepositoryITFactory extends IntegrationTestBase {
     private MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository;
     private UserRepository userRepository;
 

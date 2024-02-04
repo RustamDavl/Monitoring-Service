@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WaterMeterReadingRepositoryIT extends IntegrationTestBase {
+public class WaterMeterReadingRepositoryITFactory extends IntegrationTestBase {
     private MeterReadingRepository<WaterMeterReading> waterMeterReadingRepository;
     private UserRepository userRepository;
 

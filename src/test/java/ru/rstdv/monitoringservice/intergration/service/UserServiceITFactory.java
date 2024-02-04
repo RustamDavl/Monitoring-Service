@@ -24,7 +24,7 @@ import ru.rstdv.monitoringservice.util.TestConnectionProvider;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserServiceIT extends IntegrationTestBase {
+public class UserServiceITFactory extends IntegrationTestBase {
 
     private UserService userService;
     private UserRepository userRepository;

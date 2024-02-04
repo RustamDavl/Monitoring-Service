@@ -1,15 +1,11 @@
 package ru.rstdv.monitoringservice.unit.mapper;
 
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
-import ru.rstdv.monitoringservice.dto.read.ReadAuditDto;
-import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
 import ru.rstdv.monitoringservice.entity.Audit;
 import ru.rstdv.monitoringservice.entity.User;
-import ru.rstdv.monitoringservice.entity.embeddable.Address;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
-import ru.rstdv.monitoringservice.entity.embeddable.Role;
 import ru.rstdv.monitoringservice.mapper.AuditMapper;
 import ru.rstdv.monitoringservice.mapper.AuditMapperImpl;
 
@@ -17,9 +13,13 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AuditMapperTest {
+public class AuditMapperTestFactory {
+    private AuditMapper auditMapper;
 
-    private final AuditMapper auditMapperImpl = AuditMapperImpl.getInstance();
+    @BeforeEach
+    void setUp() {
+        auditMapper = new AuditMapperImpl();
+    }
 
     @Test
     void toReadAuditDto() {
@@ -32,7 +32,7 @@ public class AuditMapperTest {
                 .description("descr")
                 .build();
 
-        var actualResult = auditMapperImpl.toReadAuditDto(audit);
+        var actualResult = auditMapper.toReadAuditDto(audit);
 
         assertThat(actualResult.id()).isEqualTo(audit.getId().toString());
         assertThat(actualResult.userId()).isEqualTo(audit.getUserId().toString());
@@ -53,7 +53,7 @@ public class AuditMapperTest {
                 auditLocalDateTime,
                 "descr"
         );
-        var actualResult = auditMapperImpl.toAudit(createAuditDto, user);
+        var actualResult = auditMapper.toAudit(createAuditDto, user);
 
         assertThat(actualResult.getUserId()).isEqualTo(Long.valueOf(createAuditDto.userId()));
         assertThat(actualResult.getAuditAction().name()).isEqualTo(createAuditDto.auditAction());

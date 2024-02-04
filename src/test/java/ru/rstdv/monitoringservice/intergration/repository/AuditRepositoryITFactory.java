@@ -22,7 +22,7 @@ import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AuditRepositoryIT extends IntegrationTestBase {
+public class AuditRepositoryITFactory extends IntegrationTestBase {
     private AuditRepository auditRepository;
     private UserRepository userRepository;
 

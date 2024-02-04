@@ -13,25 +13,19 @@ import java.sql.Connection;
 @UtilityClass
 public class LiquibaseUtil {
     private Liquibase liquibase;
-
     public void start(ConnectionProvider connectionProvider) {
         try {
             Connection connection = connectionProvider.getConnection();
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
-
             database.setLiquibaseSchemaName("liquibase");
             database.setDefaultSchemaName("monitoring_service");
-
-            liquibase =
-                    new Liquibase("db/changelog/db.changelog-master.yaml", new ClassLoaderResourceAccessor(), database);
-
+            liquibase = new Liquibase("db/changelog/db.changelog-master.yaml", new ClassLoaderResourceAccessor(), database);
             liquibase.update();
             System.out.println("Migration completed!");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     public void dropAll() {
         try {
             liquibase.dropAll();

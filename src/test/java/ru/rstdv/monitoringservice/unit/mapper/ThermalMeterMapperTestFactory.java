@@ -12,7 +12,7 @@ import java.time.Year;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ThermalMeterMapperTest {
+public class ThermalMeterMapperTestFactory {
 
     private ThermalMeterMapper thermalMeterMapper;
 

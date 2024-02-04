@@ -17,9 +17,7 @@ import java.time.LocalDateTime;
 public class WaterMeterReading extends MeterReading {
 
     private Long id;
-
     private Integer coldWater;
-
     private Integer hotWater;
 
 }

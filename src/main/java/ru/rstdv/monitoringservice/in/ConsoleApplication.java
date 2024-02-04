@@ -12,9 +12,11 @@ import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
+import ru.rstdv.monitoringservice.entity.embeddable.Role;
 import ru.rstdv.monitoringservice.exception.IncorrectMonthValueException;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFoundException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
+import ru.rstdv.monitoringservice.factory.*;
 import ru.rstdv.monitoringservice.mapper.*;
 import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.service.*;
@@ -25,31 +27,10 @@ import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class ConsoleApplication {
-
-    private final UserRepository userRepository = new UserRepositoryImpl(new CommonConnectionProvider());
-    private final MeterReadingRepository<WaterMeterReading> waterMeterReadingRepository = new WaterMeterReadingRepositoryImpl(new CommonConnectionProvider());
-    private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository = new ThermalMeterReadingRepositoryImpl(new CommonConnectionProvider());
-    private final UserMapper userMapper = new UserMapperImpl();
-    private final AuditMapper auditMapper = new AuditMapperImpl(userMapper);
-    private final WaterMeterMapper waterMeterMapper = new WaterMeterMapperImpl();
-    private final ThermalMeterMapper thermalMeterMapper = new ThermalMeterMapperImpl();
-    private final AuditRepository auditRepository = new AuditRepositoryImpl(new CommonConnectionProvider());
-    private final AuditService auditServiceImpl = new AuditServiceImpl(auditRepository, auditMapper, userRepository);
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl(userRepository, userMapper, auditServiceImpl);
-    private final MeterReadingService<ReadWaterMeterReadingDto, CreateUpdateWaterMeterReadingDto> waterMeterReadingServiceImpl = new WaterMeterReadingServiceImpl(
-            waterMeterReadingRepository,
-            userRepository,
-            waterMeterMapper,
-            auditServiceImpl
-    );
-    private final MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> thermalMeterReadingServiceImpl = new ThermalMeterReadingServiceImpl(
-            thermalMeterReadingRepository,
-            userRepository,
-            thermalMeterMapper,
-            auditServiceImpl
-    );
-
-
+    private ServiceFactory serviceFactory;
+    public ConsoleApplication() {
+        serviceFactory = new ServiceFactoryImpl();
+    }
     public void start() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -59,7 +40,6 @@ public class ConsoleApplication {
             System.out.println("2. Авторизация");
             System.out.println("Q. Выход");
             String choice = scanner.nextLine();
-
             if (choice.equals("1")) {
                 System.out.println("Для регистрации необходимо ввести следующие данные : ");
 
@@ -79,22 +59,21 @@ public class ConsoleApplication {
                 System.out.println("Введите номер дома : ");
                 var houseNumber = scanner.nextLine();
                 var createUpdateUserDto = new CreateUpdateUserDto(firstname, email, password, personalAccount, city, street, houseNumber);
-                var res = userServiceImpl.register(createUpdateUserDto);
+                var res = serviceFactory.createUserService().register(createUpdateUserDto);
                 System.out.println(res);
                 System.out.println("registration success ! ");
                 System.out.println();
             } else if (choice.equals("2")) {
                 System.out.println("Для авторизации необходимо ввести следующие данные : ");
-
                 System.out.println("Введите адрес почты : ");
                 var email = scanner.nextLine();
                 System.out.println("Введите пароль : ");
                 var password = scanner.nextLine();
                 try {
-                    var user = userServiceImpl.authenticate(email, password);
+                    var user = serviceFactory.createUserService().authenticate(email, password);
                     System.out.println();
                     System.out.println("Hello, " + user.firstname() + " !");
-                    if (user.role().equals("ADMIN")) {
+                    if (user.role().equals(Role.ADMIN.name())) {
                         String answer = null;
                         do {
                             System.out.println("Выберите одно из действий : ");
@@ -104,7 +83,7 @@ public class ConsoleApplication {
                             System.out.println("Q. Выход");
                             answer = scanner.nextLine();
                             if (answer.equals("1")) {
-                                var users = userServiceImpl.findAll();
+                                var users = serviceFactory.createUserService().findAll();
                                 users.forEach(
                                         System.out::println
                                 );
@@ -113,8 +92,8 @@ public class ConsoleApplication {
                                 var id = scanner.nextLine();
 
                                 try {
-                                    ReadUserDto readUserDto = readUserDto = userServiceImpl.findById(Long.valueOf(id));
-                                    var audits = auditServiceImpl.findUserAudits(readUserDto.id());
+                                    ReadUserDto readUserDto = readUserDto = serviceFactory.createUserService().findById(Long.valueOf(id));
+                                    var audits = serviceFactory.createAuditService().findUserAudits(readUserDto.id());
                                     System.out.println("User : ");
                                     System.out.println(readUserDto);
                                     System.out.println("User audits");
@@ -123,8 +102,6 @@ public class ConsoleApplication {
                                     System.out.println(e.getMessage());
                                 }
                             }
-
-
                         } while (!answer.equalsIgnoreCase("Q"));
                     } else if (user.role().equals("USER")) {
                         String answer = null;
@@ -149,7 +126,7 @@ public class ConsoleApplication {
                                 var hotValue = scanner.nextLine();
                                 CreateUpdateWaterMeterReadingDto createUpdateWaterMeterReadingDto = new CreateUpdateWaterMeterReadingDto(user.id(), coldValue, hotValue);
                                 try {
-                                    var res = waterMeterReadingServiceImpl.save(createUpdateWaterMeterReadingDto);
+                                    var res = serviceFactory.createWaterMeterReadingService().save(createUpdateWaterMeterReadingDto);
                                     System.out.println(res);
                                 } catch (UserNotFoundException e) {
                                     System.out.println(e.getMessage());
@@ -159,37 +136,36 @@ public class ConsoleApplication {
                                 var value = scanner.nextLine();
                                 CreateUpdateThermalMeterReadingDto createUpdateThermalMeterReadingDto = new CreateUpdateThermalMeterReadingDto(user.id(), value);
                                 try {
-                                    var res = thermalMeterReadingServiceImpl.save(createUpdateThermalMeterReadingDto);
+                                    var res = serviceFactory.createThermalMeterReadingService().save(createUpdateThermalMeterReadingDto);
                                     System.out.println(res);
                                 } catch (UserNotFoundException e) {
                                     System.out.println(e.getMessage());
                                 }
                             } else if (answer.equals("3")) {
                                 try {
-                                    var res = thermalMeterReadingServiceImpl.findActualByUserId(Long.valueOf(user.id()));
+                                    var res = serviceFactory.createThermalMeterReadingService().findActualByUserId(Long.valueOf(user.id()));
                                     System.out.println(res);
                                 } catch (MeterReadingNotFoundException e) {
                                     System.out.println(e.getMessage());
                                 }
-
                             } else if (answer.equals("4")) {
                                 try {
-                                    var res = waterMeterReadingServiceImpl.findActualByUserId(Long.valueOf(user.id()));
+                                    var res = serviceFactory.createWaterMeterReadingService().findActualByUserId(Long.valueOf(user.id()));
                                     System.out.println(res);
                                 } catch (MeterReadingNotFoundException e) {
                                     System.out.println(e.getMessage());
                                 }
                             } else if (answer.equals("5")) {
-                                var res = thermalMeterReadingServiceImpl.findAllByUserId(Long.valueOf(user.id()));
+                                var res = serviceFactory.createThermalMeterReadingService().findAllByUserId(Long.valueOf(user.id()));
                                 System.out.println(res);
                             } else if (answer.equals("6")) {
-                                var res = waterMeterReadingServiceImpl.findActualByUserId(Long.valueOf(user.id()));
+                                var res = serviceFactory.createWaterMeterReadingService().findActualByUserId(Long.valueOf(user.id()));
                                 System.out.println(res);
                             } else if (answer.equals("7")) {
                                 System.out.println("Введите номер месяца");
                                 var monthValue = scanner.nextLine();
                                 try {
-                                    var res = thermalMeterReadingServiceImpl.findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
+                                    var res = serviceFactory.createThermalMeterReadingService().findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
                                     System.out.println(res);
 
                                 } catch (MeterReadingNotFoundException | IncorrectMonthValueException e) {
@@ -199,30 +175,25 @@ public class ConsoleApplication {
                                 System.out.println("Введите номер месяца");
                                 var monthValue = scanner.nextLine();
                                 try {
-                                    var res = waterMeterReadingServiceImpl.findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
+                                    var res = serviceFactory.createWaterMeterReadingService().findByMonthAndUserId(new MonthFilterImpl(Integer.parseInt(monthValue)), Long.valueOf(user.id()));
                                     System.out.println(res);
 
                                 } catch (MeterReadingNotFoundException | IncorrectMonthValueException e) {
                                     System.out.println(e.getMessage());
                                 }
                             }
-
-
                         } while (!answer.equalsIgnoreCase("Q"));
-                        auditServiceImpl.saveAudit(new CreateAuditDto(
+                        serviceFactory.createAuditService().saveAudit(new CreateAuditDto(
                                 user.id(),
                                 AuditAction.LOGOUT.name(),
                                 LocalDateTime.now(),
                                 "user log out"
                         ));
                     }
-
                 } catch (UserNotFoundException e) {
                     String message = e.getMessage();
                     System.out.println("Oops... " + message);
                 }
-
-
             } else if (choice.equalsIgnoreCase("Q")) {
                 break;
 

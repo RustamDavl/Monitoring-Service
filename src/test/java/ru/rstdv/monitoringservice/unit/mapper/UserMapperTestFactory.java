@@ -12,7 +12,7 @@ import ru.rstdv.monitoringservice.mapper.UserMapperImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserMapperTest {
+public class UserMapperTestFactory {
 
     private UserMapper userMapper;
 
