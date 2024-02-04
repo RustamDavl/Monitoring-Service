@@ -12,8 +12,6 @@ import java.sql.Connection;
 
 @UtilityClass
 public class LiquibaseUtil {
-
-    private ConnectionProvider connectionProvider;
     private Liquibase liquibase;
 
     public void start(ConnectionProvider connectionProvider) {

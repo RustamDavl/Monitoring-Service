@@ -11,7 +11,7 @@ public class ApplicationRunner {
     public static void main(String[] args) {
 
         LiquibaseUtil.start(new CommonConnectionProvider());
-//        ConsoleApplication consoleApplication = new ConsoleApplication();
-//        consoleApplication.start();
+        ConsoleApplication consoleApplication = new ConsoleApplication();
+        consoleApplication.start();
     }
 }

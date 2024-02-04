@@ -18,11 +18,6 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     private final ConnectionProvider connectionProvider;
-
-    public static UserRepositoryImpl getInstance() {
-        return new UserRepositoryImpl(null);
-    }
-
     private static final String SAVE_SQL = """
             INSERT INTO users(firstname, email, password, personal_account, role, city, street, house_number)\s
             VALUES (?, ?, ?, ?, ?, ?, ?, ?);
