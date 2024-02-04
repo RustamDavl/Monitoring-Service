@@ -3,8 +3,13 @@ package ru.rstdv.monitoringservice.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.Year;
+import java.util.Date;
 
 /**
  * базовый класс показания счетчика с общими полями.
@@ -19,7 +24,6 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public abstract class MeterReading {
 
-    protected User user;
-
-    protected LocalDateTime dateOfMeterReading;
+    protected Long userId;
+    protected MeterReadingDate meterReadingDate;
 }

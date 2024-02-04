@@ -1,69 +1,193 @@
 package ru.rstdv.monitoringservice.repository;
 
+import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
 import ru.rstdv.monitoringservice.entity.MeterReading;
+import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
+import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
+import ru.rstdv.monitoringservice.util.ConnectionProvider;
 import ru.rstdv.monitoringservice.util.DataBaseTable;
 
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.sql.*;
+import java.time.Year;
+import java.util.*;
 
+@RequiredArgsConstructor
 public class WaterMeterReadingRepositoryImpl implements MeterReadingRepository<WaterMeterReading> {
-    private static final WaterMeterReadingRepositoryImpl INSTANCE = new WaterMeterReadingRepositoryImpl();
-    private static final DataBaseTable<WaterMeterReading> WATER_METER_TABLE = new DataBaseTable<>();
 
-    private WaterMeterReadingRepositoryImpl() {
-    }
+    private final ConnectionProvider connectionProvider;
+    private static final String SAVE_SQL = """
+            INSERT INTO water_meter_reading(user_id, cold_water, hot_water, meter_reading_year, meter_reading_month, meter_reading_day)
+            VALUES (?, ?, ?, ?, ?, ?);
+            """;
 
-    public static WaterMeterReadingRepositoryImpl getInstance() {
-        return INSTANCE;
-    }
+    private static final String FIND_ACTUAL_BY_USER_ID_SQL = """
+            SELECT id, user_id, cold_water,hot_water, meter_reading_year, meter_reading_month, meter_reading_day
+            FROM water_meter_reading
+            WHERE user_id = ?
+            ORDER BY meter_reading_month DESC 
+            LIMIT 1
+            """;
 
-    public static void clearDataBase() {
-        WATER_METER_TABLE.clear();
-    }
+    private static final String FIND_ALL_BY_USER_ID_SQL = """
+            SELECT id, user_id, cold_water,hot_water, meter_reading_year, meter_reading_month, meter_reading_day
+            FROM water_meter_reading
+            WHERE user_id = ?;
+            """;
+
+    private static final String FIND_BY_DATE_AND_USER_ID_SQL = """
+            SELECT id, user_id, cold_water,hot_water, meter_reading_year, meter_reading_month, meter_reading_day
+            FROM water_meter_reading
+            WHERE user_id = ? AND meter_reading_month = ?
+            """;
+
+    private static final String FIND_ALL_SQL = """
+            SELECT id, user_id, cold_water,hot_water, meter_reading_year, meter_reading_month, meter_reading_day
+            FROM water_meter_reading
+            """;
+
     @Override
     public WaterMeterReading save(WaterMeterReading waterMeterReading) {
-        return WATER_METER_TABLE.INSERT(waterMeterReading);
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+            preparedStatement.setLong(1, waterMeterReading.getUserId());
+            preparedStatement.setInt(2, waterMeterReading.getColdWater());
+            preparedStatement.setInt(3, waterMeterReading.getHotWater());
+            preparedStatement.setString(4, waterMeterReading.getMeterReadingDate().getYear().toString());
+            preparedStatement.setInt(5, waterMeterReading.getMeterReadingDate().getMonth());
+            preparedStatement.setInt(6, waterMeterReading.getMeterReadingDate().getMonthDay());
+            preparedStatement.executeUpdate();
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                waterMeterReading.setId(generatedKeys.getLong("id"));
+            }
+            return waterMeterReading;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Optional<WaterMeterReading> findActualByUserId(Long id) {
-        var actualWaterMeterReadings = WATER_METER_TABLE.GET_ALL().stream()
-                .filter(thermalMeterReading -> Objects.equals(thermalMeterReading.getUser().getId(), id))
-                .sorted(Comparator.comparing(MeterReading::getDateOfMeterReading, Comparator.reverseOrder()))
-                .toList();
-        if (actualWaterMeterReadings.isEmpty())
-            return Optional.empty();
-
-        return Optional.ofNullable(actualWaterMeterReadings.get(0));
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ACTUAL_BY_USER_ID_SQL)) {
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(
+                        WaterMeterReading.builder()
+                                .id(resultSet.getLong("id"))
+                                .userId(resultSet.getLong("user_id"))
+                                .coldWater(resultSet.getInt("cold_water"))
+                                .hotWater(resultSet.getInt("hot_water"))
+                                .meterReadingDate(
+                                        MeterReadingDate.builder()
+                                                .year(Year.parse(resultSet.getString("meter_reading_year")))
+                                                .month(resultSet.getInt("meter_reading_month"))
+                                                .monthDay(resultSet.getInt("meter_reading_day"))
+                                                .build()
+                                )
+                                .build()
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return Optional.empty();
     }
 
     @Override
     public List<WaterMeterReading> findAllByUserId(Long id) {
-        return WATER_METER_TABLE.GET_ALL()
-                .stream()
-                .filter(thermalMeterReading -> Objects.equals(thermalMeterReading.getUser().getId(), id))
-                .toList();
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_USER_ID_SQL)) {
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<WaterMeterReading> waterMeterReadings = new ArrayList<>();
+            while (resultSet.next()) {
+                waterMeterReadings.add(
+                        WaterMeterReading.builder()
+                                .id(resultSet.getLong("id"))
+                                .userId(resultSet.getLong("user_id"))
+                                .coldWater(resultSet.getInt("cold_water"))
+                                .hotWater(resultSet.getInt("hot_water"))
+                                .meterReadingDate(
+                                        MeterReadingDate.builder()
+                                                .year(Year.parse(resultSet.getString("meter_reading_year")))
+                                                .month(resultSet.getInt("meter_reading_month"))
+                                                .monthDay(resultSet.getInt("meter_reading_day"))
+                                                .build()
+                                )
+                                .build()
+                );
+            }
+            return waterMeterReadings;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Optional<WaterMeterReading> findByMonthAndUserId(MonthFilter monthFilter, Long id) {
-        var list = WATER_METER_TABLE.GET_ALL().stream()
-                .filter(waterMeterReading -> Objects.equals(waterMeterReading.getUser().getId(), id))
-                .filter(thermalMeterReading -> thermalMeterReading.getDateOfMeterReading().getMonthValue() == monthFilter.getMonthNumber())
-                .toList();
-        if (list.isEmpty())
-            return Optional.empty();
-
-        return Optional.ofNullable(list.get(0));
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_DATE_AND_USER_ID_SQL)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.setInt(2, monthFilter.getMonthNumber());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(
+                        WaterMeterReading.builder()
+                                .id(resultSet.getLong("id"))
+                                .userId(resultSet.getLong("user_id"))
+                                .coldWater(resultSet.getInt("cold_water"))
+                                .hotWater(resultSet.getInt("hot_water"))
+                                .meterReadingDate(
+                                        MeterReadingDate.builder()
+                                                .year(Year.parse(resultSet.getString("meter_reading_year")))
+                                                .month(resultSet.getInt("meter_reading_month"))
+                                                .monthDay(resultSet.getInt("meter_reading_day"))
+                                                .build()
+                                )
+                                .build()
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return Optional.empty();
     }
+
     @Override
     public List<WaterMeterReading> findAll() {
-        return WATER_METER_TABLE.GET_ALL();
+        try (Connection connection = connectionProvider.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<WaterMeterReading> waterMeterReadings = new ArrayList<>();
+            while (resultSet.next()) {
+                waterMeterReadings.add(
+                        WaterMeterReading.builder()
+                                .id(resultSet.getLong("id"))
+                                .userId(resultSet.getLong("user_id"))
+                                .coldWater(resultSet.getInt("cold_water"))
+                                .hotWater(resultSet.getInt("hot_water"))
+                                .meterReadingDate(
+                                        MeterReadingDate.builder()
+                                                .year(Year.parse(resultSet.getString("meter_reading_year")))
+                                                .month(resultSet.getInt("meter_reading_month"))
+                                                .monthDay(resultSet.getInt("meter_reading_day"))
+                                                .build()
+                                )
+                                .build()
+                );
+            }
+            return waterMeterReadings;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

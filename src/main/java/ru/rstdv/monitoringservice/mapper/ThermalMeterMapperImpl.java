@@ -5,31 +5,31 @@ import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadi
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.User;
+import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
 
-import java.time.LocalDateTime;
+import java.time.*;
 
-@RequiredArgsConstructor
 public class ThermalMeterMapperImpl implements ThermalMeterMapper {
-
-    private final UserMapper userMapper;
 
     @Override
     public ReadThermalMeterReadingDto toReadThermalMeterReadingDto(ThermalMeterReading thermalMeterReading) {
         return new ReadThermalMeterReadingDto(
                 thermalMeterReading.getId().toString(),
-                userMapper.toReadUserDto(
-                        thermalMeterReading.getUser()
-                ),
+                thermalMeterReading.getUserId().toString(),
                 thermalMeterReading.getGigaCalories().toString(),
-                thermalMeterReading.getDateOfMeterReading().toString()
+                thermalMeterReading.getMeterReadingDate()
         );
     }
 
     @Override
     public ThermalMeterReading toThermalMeterReading(CreateUpdateThermalMeterReadingDto createUpdateThermalMeterReadingDto, User user) {
         return ThermalMeterReading.builder()
-                .user(user)
-                .dateOfMeterReading(LocalDateTime.now())
+                .userId(user.getId())
+                .meterReadingDate(MeterReadingDate.builder()
+                        .year(Year.now())
+                        .month(LocalDate.now().getMonthValue())
+                        .monthDay(MonthDay.now().getDayOfMonth())
+                        .build())
                 .gigaCalories(Float.valueOf(createUpdateThermalMeterReadingDto.gigaCalories()))
                 .build();
     }

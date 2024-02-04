@@ -1,0 +1,49 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="1" author="rustd">
+        <createSequence
+                cycle="true"
+                dataType="BIGINT"
+                incrementBy="1"
+                maxValue="1000"
+                minValue="1"
+                sequenceName="users_id_seq"
+                startValue="1"/>
+    </changeSet>
+
+    <changeSet id="2" author="rustd">
+        <createTable  tableName="users">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('users_id_seq')">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="firstname" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="personal_account" type="VARCHAR(9)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="house_number" type="VARCHAR(4)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="users" columnNames="email"/>
+    </changeSet>
+</databaseChangeLog>

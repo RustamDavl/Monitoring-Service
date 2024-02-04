@@ -37,7 +37,7 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
                 object,
                 maybeUser
         );
-        waterMeterReadingToSave.setDateOfMeterReading(LocalDateTime.now());
+//        waterMeterReadingToSave.setDateOfMeterReading(LocalDateTime.now());
         var savedWaterMeterReading = waterMeterReadingRepositoryImpl.save(waterMeterReadingToSave);
 
         auditServiceImpl.saveAudit(new CreateAuditDto(
@@ -52,9 +52,9 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
 
     @Override
     public ReadWaterMeterReadingDto findActualByUserId(Long id) {
-        var maybeWaterMeter = waterMeterReadingRepositoryImpl.findActualByUserId(id).orElseThrow(
-                () -> new RuntimeException("")
-        );
+        var maybeWaterMeter = waterMeterReadingRepositoryImpl.findActualByUserId(id)
+                .orElseThrow(() -> new UserNotFoundException("there is no user with id " + id));
+
         auditServiceImpl.saveAudit(new CreateAuditDto(
                 id.toString(),
                 AuditAction.GET_ACTUAL_WATER_METER_READING.name(),

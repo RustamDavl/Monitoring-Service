@@ -19,9 +19,7 @@ public record ReadUserDto(
         String id,
         String firstname,
         String email,
-
         Address address,
-
         String role,
         String personalAccount
 

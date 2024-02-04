@@ -1,6 +1,6 @@
 package ru.rstdv.monitoringservice.unit.mapper;
 
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
@@ -14,7 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserMapperTest {
 
-    private final UserMapper userMapperImpl = UserMapperImpl.getInstance();
+    private UserMapper userMapper;
+
+    @BeforeEach
+    void setUp() {
+        userMapper = new UserMapperImpl();
+    }
 
     @Test
     void toUser() {
@@ -27,24 +32,14 @@ public class UserMapperTest {
                 "jig-jig",
                 "1"
         );
-        var actualResult = userMapperImpl.toUser(createUpdateUserDto);
+        var actualResult = userMapper.toUser(createUpdateUserDto);
 
-        var expectedResult = User.builder()
-                .firstname("Vi")
-                .email("vivi@gmail.com")
-                .password("pass")
-                .personalAccount("999999999")
-                .address(
-                        Address.builder()
-                                .city("Nigh city")
-                                .street("jig-jig")
-                                .houseNumber("1")
-                                .build()
-                )
-                .role(Role.USER)
-                .build();
-
-        assertThat(actualResult).isEqualTo(expectedResult);
+        assertThat(actualResult.getEmail()).isEqualTo(createUpdateUserDto.email());
+        assertThat(actualResult.getPassword()).isEqualTo(createUpdateUserDto.password());
+        assertThat(actualResult.getAddress().getCity()).isEqualTo(createUpdateUserDto.city());
+        assertThat(actualResult.getAddress().getStreet()).isEqualTo(createUpdateUserDto.street());
+        assertThat(actualResult.getAddress().getHouseNumber()).isEqualTo(createUpdateUserDto.houseNumber());
+        assertThat(actualResult.getPersonalAccount()).isEqualTo(createUpdateUserDto.personalAccount());
     }
 
     @Test
@@ -65,26 +60,14 @@ public class UserMapperTest {
                 .role(Role.USER)
                 .build();
 
-        var actualResult = userMapperImpl.toReadUserDto(user);
+        var actualResult = userMapper.toReadUserDto(user);
 
-        var expectedResult = new ReadUserDto(
-                "1",
-                "Vi",
-                "vivi@gmail.com",
-                Address.builder()
-                        .city("Nigh city")
-                        .street("jig-jig")
-                        .houseNumber("1")
-                        .build(),
-                "USER",
-                "999999999"
-        );
-        assertThat(actualResult.id()).isEqualTo(expectedResult.id());
-        assertThat(actualResult.firstname()).isEqualTo(expectedResult.firstname());
-        assertThat(actualResult.email()).isEqualTo(expectedResult.email());
-        assertThat(actualResult.address()).isEqualTo(expectedResult.address());
-        assertThat(actualResult.role()).isEqualTo(expectedResult.role());
-        assertThat(actualResult.personalAccount()).isEqualTo(expectedResult.personalAccount());
+        assertThat(actualResult.id()).isEqualTo(user.getId().toString());
+        assertThat(actualResult.firstname()).isEqualTo(user.getFirstname());
+        assertThat(actualResult.email()).isEqualTo(user.getEmail());
+        assertThat(actualResult.address()).isEqualTo(user.getAddress());
+        assertThat(actualResult.role()).isEqualTo(user.getRole().name());
+        assertThat(actualResult.personalAccount()).isEqualTo(user.getPersonalAccount());
 
     }
 }

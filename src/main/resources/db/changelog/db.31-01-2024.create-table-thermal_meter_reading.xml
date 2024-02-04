@@ -1,0 +1,39 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="1" author="rustd">
+        <createSequence
+                cycle="true"
+                dataType="BIGINT"
+                incrementBy="1"
+                maxValue="1000"
+                minValue="1"
+                sequenceName="thermal_meter_reading_id_seq"
+                startValue="1"/>
+    </changeSet>
+
+    <changeSet id="2" author="rustd">
+        <createTable tableName="thermal_meter_reading">
+            <column name="id" type="BIGINT" defaultValueComputed="nextval('thermal_meter_reading_id_seq')">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="users_id_fk" references="users(id)" deleteCascade="true"/>
+            </column>
+            <column name="giga_calories" type="FLOAT4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meter_reading_year" type="VARCHAR(4)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meter_reading_month" type="INT2">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meter_reading_day" type="INT2">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

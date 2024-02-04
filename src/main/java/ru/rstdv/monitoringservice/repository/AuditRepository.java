@@ -17,13 +17,13 @@ public interface AuditRepository {
      * @return - возвращает список типа Audit, который содержит информацию о пользователе и его действие
      */
 
-    List<Audit> findUserAudits(Long userId);
+    List<Audit> findByUserId(Long userId);
 
     /**
      * метод сохраняет объект типа Audit
      *
      * @param audit - объект аудита
      */
-    void saveAudit(Audit audit);
+    void save(Audit audit);
 
 }

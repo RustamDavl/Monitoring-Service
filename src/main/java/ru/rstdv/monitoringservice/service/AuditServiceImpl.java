@@ -5,11 +5,8 @@ import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.read.ReadAuditDto;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.mapper.AuditMapper;
-import ru.rstdv.monitoringservice.mapper.AuditMapperImpl;
 import ru.rstdv.monitoringservice.repository.AuditRepository;
-import ru.rstdv.monitoringservice.repository.AuditRepositoryImpl;
 import ru.rstdv.monitoringservice.repository.UserRepository;
-import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     public List<ReadAuditDto> findUserAudits(String userId) {
-        return auditRepositoryImpl.findUserAudits(Long.valueOf(userId))
+        return auditRepositoryImpl.findByUserId(Long.valueOf(userId))
                 .stream()
                 .map(auditMapperImpl::toReadAuditDto)
                 .toList();
@@ -35,6 +32,6 @@ public class AuditServiceImpl implements AuditService {
 
         var auditToSave = auditMapperImpl.toAudit(createAuditDto, user);
 
-        auditRepositoryImpl.saveAudit(auditToSave);
+        auditRepositoryImpl.save(auditToSave);
     }
 }

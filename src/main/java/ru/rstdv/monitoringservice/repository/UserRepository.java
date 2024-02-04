@@ -52,4 +52,6 @@ public interface UserRepository {
      * @return - Optional.empty() если пользователь не найден, иначе Optional.of(user)
      */
     Optional<User> findByEmail(String email);
+
+    void deleteAll();
 }

@@ -39,12 +39,12 @@ public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadT
         );
         var savedThermalMeterReading = thermalMeterReadingRepositoryImpl.save(thermalMeterReadingToSave);
 
-        auditServiceImpl.saveAudit(new CreateAuditDto(
-                object.userId(),
-                AuditAction.THERMAL_METER_READING_SENDING.name(),
-                thermalMeterReadingToSave.getDateOfMeterReading(),
-                "thermal meter readings saved"
-        ));
+//        auditServiceImpl.saveAudit(new CreateAuditDto(
+//                object.userId(),
+//                AuditAction.THERMAL_METER_READING_SENDING.name()
+//               // thermalMeterReadingToSave.getDateOfMeterReading(),
+//
+//        ));
 
 
         return thermalMeterMapperImpl.toReadThermalMeterReadingDto(
@@ -54,7 +54,7 @@ public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadT
     @Override
     public ReadThermalMeterReadingDto findActualByUserId(Long id) {
         var maybeThermalMeter = thermalMeterReadingRepositoryImpl.findActualByUserId(id)
-                .orElseThrow(() -> new MeterReadingNotFoundException("there is no any meter readings"));
+                .orElseThrow(() -> new UserNotFoundException("there is no user with id " + id));
 
         auditServiceImpl.saveAudit(new CreateAuditDto(
                 id.toString(),
@@ -86,7 +86,7 @@ public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadT
     public ReadThermalMeterReadingDto findByMonthAndUserId(MonthFilter monthFilter, Long id) {
         if (!isMonthValueCorrect(monthFilter.getMonthNumber()))
             throw new IncorrectMonthValueException("month value must be between [1, 12] but your value is : " + monthFilter.getMonthNumber());
-        var list = thermalMeterReadingRepositoryImpl.findByMonthAndUserId(monthFilter, id)
+        var readThermalMeterReadingDto = thermalMeterReadingRepositoryImpl.findByMonthAndUserId(monthFilter, id)
                 .map(thermalMeterMapperImpl::toReadThermalMeterReadingDto)
                 .orElseThrow(() -> new MeterReadingNotFoundException("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
 
@@ -98,7 +98,7 @@ public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadT
                         "user got thermal meter reading by month : " + Month.of(monthFilter.getMonthNumber())
                 )
         );
-        return list;
+        return readThermalMeterReadingDto;
 
     }
 

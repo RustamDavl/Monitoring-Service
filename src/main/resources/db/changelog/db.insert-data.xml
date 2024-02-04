@@ -1,0 +1,161 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="1" author="rustd">
+        <insert tableName="users">
+            <column name="firstname" value="admin"/>
+            <column name="email" value="admin@gmail.com"/>
+            <column name="password" value="pass"/>
+            <column name="personal_account" value="999999999"/>
+            <column name="role" value="ADMIN"/>
+            <column name="city" value="kazan"/>
+            <column name="street" value="sss"/>
+            <column name="house_number" value="ss"/>
+        </insert>
+        <insert tableName="users">
+            <column name="firstname" value="user"/>
+            <column name="email" value="user2@gmail.com"/>
+            <column name="password" value="pass"/>
+            <column name="personal_account" value="999999999"/>
+            <column name="role" value="USER"/>
+            <column name="city" value="Nigh city"/>
+            <column name="street" value="jig-jig"/>
+            <column name="house_number" value="1"/>
+        </insert>
+        <insert tableName="users">
+            <column name="firstname" value="admin"/>
+            <column name="email" value="user3@gmail.com"/>
+            <column name="password" value="pass"/>
+            <column name="personal_account" value="999999999"/>
+            <column name="role" value="USER"/>
+            <column name="city" value="kazan"/>
+            <column name="street" value="sss"/>
+            <column name="house_number" value="ss"/>
+        </insert>
+        <insert tableName="users">
+            <column name="firstname" value="admin"/>
+            <column name="email" value="user4@gmail.com"/>
+            <column name="password" value="pass"/>
+            <column name="personal_account" value="999999999"/>
+            <column name="role" value="USER"/>
+            <column name="city" value="kazan"/>
+            <column name="street" value="sss"/>
+            <column name="house_number" value="ss"/>
+        </insert>
+        <insert tableName="users">
+            <column name="firstname" value="admin"/>
+            <column name="email" value="user5@gmail.com"/>
+            <column name="password" value="pass"/>
+            <column name="personal_account" value="999999999"/>
+            <column name="role" value="USER"/>
+            <column name="city" value="kazan"/>
+            <column name="street" value="sss"/>
+            <column name="house_number" value="ss"/>
+        </insert>
+        <insert tableName="users">
+            <column name="firstname" value="admin"/>
+            <column name="email" value="user6@gmail.com"/>
+            <column name="password" value="pass"/>
+            <column name="personal_account" value="999999999"/>
+            <column name="role" value="USER"/>
+            <column name="city" value="kazan"/>
+            <column name="street" value="sss"/>
+            <column name="house_number" value="ss"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="2" author="rustd">
+        <insert tableName="thermal_meter_reading">
+            <column name="user_id" value="2"/>
+            <column name="giga_calories" value="123"/>
+            <column name="meter_reading_year" value="2023"/>
+            <column name="meter_reading_month" value="3"/>
+            <column name="meter_reading_day" value="20"/>
+        </insert>
+        <insert tableName="thermal_meter_reading">
+            <column name="user_id" value="2"/>
+            <column name="giga_calories" value="345"/>
+            <column name="meter_reading_year" value="2023"/>
+            <column name="meter_reading_month" value="4"/>
+            <column name="meter_reading_day" value="23"/>
+        </insert>
+        <insert tableName="thermal_meter_reading">
+            <column name="user_id" value="2"/>
+            <column name="giga_calories" value="678"/>
+            <column name="meter_reading_year" value="2023"/>
+            <column name="meter_reading_month" value="5"/>
+            <column name="meter_reading_day" value="20"/>
+        </insert>
+        <insert tableName="thermal_meter_reading">
+            <column name="user_id" value="4"/>
+            <column name="giga_calories" value="422"/>
+            <column name="meter_reading_year" value="2024"/>
+            <column name="meter_reading_month" value="4"/>
+            <column name="meter_reading_day" value="20"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="3" author="rustd">
+        <insert tableName="water_meter_reading">
+            <column name="user_id" value="2"/>
+            <column name="cold_water" value="100"/>
+            <column name="hot_water" value="80"/>
+            <column name="meter_reading_year" value="2023"/>
+            <column name="meter_reading_month" value="3"/>
+            <column name="meter_reading_day" value="20"/>
+        </insert>
+        <insert tableName="water_meter_reading">
+            <column name="user_id" value="2"/>
+            <column name="cold_water" value="200"/>
+            <column name="hot_water" value="160"/>
+            <column name="meter_reading_year" value="2023"/>
+            <column name="meter_reading_month" value="4"/>
+            <column name="meter_reading_day" value="20"/>
+        </insert>
+        <insert tableName="water_meter_reading">
+            <column name="user_id" value="2"/>
+            <column name="cold_water" value="300"/>
+            <column name="hot_water" value="240"/>
+            <column name="meter_reading_year" value="2023"/>
+            <column name="meter_reading_month" value="5"/>
+            <column name="meter_reading_day" value="20"/>
+        </insert>
+        <insert tableName="water_meter_reading">
+            <column name="user_id" value="4"/>
+            <column name="cold_water" value="400"/>
+            <column name="hot_water" value="300"/>
+            <column name="meter_reading_year" value="2023"/>
+            <column name="meter_reading_month" value="6"/>
+            <column name="meter_reading_day" value="20"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="4" author="rustd">
+        <insert tableName="audit">
+            <column name="user_id" value="3"/>
+            <column name="audit_action" value="REGISTRATION"/>
+            <column name="description" value="registered"/>
+            <column name="audit_date_time" value="2023-06-22 19:10:25-07"/>
+        </insert>
+        <insert tableName="audit">
+            <column name="user_id" value="3"/>
+            <column name="audit_action" value="AUTHENTICATION"/>
+            <column name="description" value="authenticated"/>
+            <column name="audit_date_time" value="2023-06-22 19:12:25-07"/>
+        </insert>
+        <insert tableName="audit">
+            <column name="user_id" value="3"/>
+            <column name="audit_action" value="LOGOUT"/>
+            <column name="description" value="logged out"/>
+            <column name="audit_date_time" value="2023-06-22 19:50:25-07"/>
+        </insert>
+        <insert tableName="audit">
+            <column name="user_id" value="4"/>
+            <column name="audit_action" value="REGISTRATION"/>
+            <column name="description" value="registered"/>
+            <column name="audit_date_time" value="2024-01-22 19:10:25-07"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

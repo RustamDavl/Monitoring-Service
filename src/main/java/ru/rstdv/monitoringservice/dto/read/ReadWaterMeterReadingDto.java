@@ -1,10 +1,12 @@
 package ru.rstdv.monitoringservice.dto.read;
 
+import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
+
 /**
  * отображение класса WaterMeterReading, возвращаемое пользователю
  *
  * @param id                 идентификатор
- * @param readUserDto        отображение пользователя
+ * @param userId        отображение пользователя
  * @param coldWater          значение холодной воды в кубометрах
  * @param hotWater           значение горячей воды в кубометрах
  * @param dateOfMeterReading дата внесения показания
@@ -13,10 +15,10 @@ package ru.rstdv.monitoringservice.dto.read;
  */
 public record ReadWaterMeterReadingDto(
         String id,
-        ReadUserDto readUserDto,
+        String userId,
         String coldWater,
         String hotWater,
-        String dateOfMeterReading
+        MeterReadingDate dateOfMeterReading
 
 ) {
 }

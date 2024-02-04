@@ -14,13 +14,15 @@ public class AuditMapperImpl implements AuditMapper {
 
     private final UserMapper userMapper;
 
+    public static AuditMapperImpl getInstance() {
+        return new AuditMapperImpl(null);
+    }
+
     @Override
     public ReadAuditDto toReadAuditDto(Audit audit) {
         return new ReadAuditDto(
                 audit.getId().toString(),
-                userMapper.toReadUserDto(
-                        audit.getUser()
-                ),
+                audit.getUserId().toString(),
                 audit.getAuditDateTime().toString(),
                 audit.getAuditAction().name(),
                 audit.getDescription()
@@ -30,7 +32,7 @@ public class AuditMapperImpl implements AuditMapper {
     @Override
     public Audit toAudit(CreateAuditDto createAuditDto, User user) {
         return Audit.builder()
-                .user(user)
+                .userId(user.getId())
                 .description(createAuditDto.description())
                 .auditAction(AuditAction.valueOf(createAuditDto.auditAction()))
                 .auditDateTime(createAuditDto.auditDateTime())

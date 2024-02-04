@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: db.31-01-2024.create-schemas.xml
+      relativeToChangelogFile: true
+  - include:
+      file: db.31-01-2024.create-table-users.xml
+      relativeToChangelogFile: true
+  - include:
+      file: db.31-01-2024.create-table-audit.xml
+      relativeToChangelogFile: true
+  - include:
+      file: db.31-01-2024.create-table-thermal_meter_reading.xml
+      relativeToChangelogFile: true
+  - include:
+      file: db.31-01-2024.create-table-water_meter_reading.xml
+      relativeToChangelogFile: true
+  - include:
+      file: db.insert-data.xml
+      relativeToChangelogFile: true

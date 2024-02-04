@@ -53,11 +53,8 @@ public class UserServiceTest {
     @Test
     void register_should_throw_EmailRegisteredException() {
         var createUpdateUserDto = getCreateUpdateUserDto();
-
         var user = getUser();
-
         doReturn(Optional.of(user)).when(userRepositoryImpl).findByEmail(createUpdateUserDto.email());
-
         assertThrows(EmailRegisteredException.class, () -> userServiceImpl.register(createUpdateUserDto));
     }
 
@@ -65,6 +62,7 @@ public class UserServiceTest {
     void authenticate_should_pass() {
         var user = getUser();
         var readUserDto = getReadUserDto();
+
         doReturn(Optional.of(user)).when(userRepositoryImpl).findByEmailAndPassword(user.getEmail(), user.getPassword());
         doReturn(readUserDto).when(userMapperImpl).toReadUserDto(user);
 
@@ -75,7 +73,6 @@ public class UserServiceTest {
     @Test
     void authenticate_should_throw_UserNotFoundException() {
         var user = getUser();
-        var readUserDto = getReadUserDto();
         doReturn(Optional.empty()).when(userRepositoryImpl).findByEmailAndPassword(user.getEmail(), user.getPassword());
 
         org.junit.jupiter.api.Assertions.assertThrows(
@@ -102,10 +99,6 @@ public class UserServiceTest {
         org.junit.jupiter.api.Assertions.assertThrows(
                 UserNotFoundException.class, () -> userServiceImpl.findById(1L)
         );
-    }
-    @Test
-    void findAll() {
-        // TODO: 28.01.2024  
     }
 
     private User getUser() {

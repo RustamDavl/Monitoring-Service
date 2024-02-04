@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class Audit {
 
     private Long id;
-    private User user;
+    private Long userId;
     private AuditAction auditAction;
     private String description;
     private LocalDateTime auditDateTime;

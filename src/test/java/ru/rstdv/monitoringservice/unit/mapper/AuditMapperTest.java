@@ -26,47 +26,19 @@ public class AuditMapperTest {
         var auditLocalDateTime = LocalDateTime.now();
         var audit = Audit.builder()
                 .id(1L)
-                .user(User.builder()
-                        .id(1L)
-                        .firstname("Vi")
-                        .email("vivi@gmail.com")
-                        .password("pass")
-                        .personalAccount("999999999")
-                        .address(
-                                Address.builder()
-                                        .city("Nigh city")
-                                        .street("jig-jig")
-                                        .houseNumber("1")
-                                        .build()
-                        )
-                        .role(Role.USER)
-                        .build())
+                .userId(1L)
                 .auditAction(AuditAction.AUTHENTICATION)
                 .auditDateTime(auditLocalDateTime)
                 .description("descr")
                 .build();
 
         var actualResult = auditMapperImpl.toReadAuditDto(audit);
-        var expectedResult = new ReadAuditDto(
-                "1",
-                new ReadUserDto(
-                        "1",
-                        "Vi",
-                        "vivi@gmail.com",
-                        Address.builder()
-                                .city("Nigh city")
-                                .street("jig-jig")
-                                .houseNumber("1")
-                                .build(),
-                        "USER",
-                        "999999999"
-                ),
-                auditLocalDateTime.toString(),
-                "AUTHENTICATION",
-                "descr"
 
-        );
-        assertThat(actualResult).isEqualTo(expectedResult);
+        assertThat(actualResult.id()).isEqualTo(audit.getId().toString());
+        assertThat(actualResult.userId()).isEqualTo(audit.getUserId().toString());
+        assertThat(actualResult.auditAction()).isEqualTo(audit.getAuditAction().name());
+        assertThat(actualResult.description()).isEqualTo(audit.getDescription());
+        assertThat(actualResult.id()).isEqualTo(audit.getId().toString());
     }
 
     @Test
@@ -74,39 +46,18 @@ public class AuditMapperTest {
         var auditLocalDateTime = LocalDateTime.now();
         var user = User.builder()
                 .id(1L)
-                .firstname("Vi")
-                .email("vivi@gmail.com")
-                .password("pass")
-                .personalAccount("999999999")
-                .address(
-                        Address.builder()
-                                .city("Nigh city")
-                                .street("jig-jig")
-                                .houseNumber("1")
-                                .build()
-                )
-                .role(Role.USER)
                 .build();
         var createAuditDto = new CreateAuditDto(
-                "1",
-                "AUTHENTICATION",
+                user.getId().toString(),
+                AuditAction.REGISTRATION.name(),
                 auditLocalDateTime,
                 "descr"
         );
         var actualResult = auditMapperImpl.toAudit(createAuditDto, user);
 
-        var expectedResult = Audit.builder()
-                .user(user)
-                .auditAction(AuditAction.AUTHENTICATION)
-                .auditDateTime(auditLocalDateTime)
-                .description("descr")
-                .build();
-
-        assertThat(actualResult.getId()).isEqualTo(expectedResult.getId());
-        assertThat(actualResult.getUser()).isEqualTo(expectedResult.getUser());
-        assertThat(actualResult.getAuditDateTime()).isEqualTo(expectedResult.getAuditDateTime());
-        assertThat(actualResult.getDescription()).isEqualTo(expectedResult.getDescription());
-        assertThat(actualResult.getAuditAction()).isEqualTo(expectedResult.getAuditAction());
+        assertThat(actualResult.getUserId()).isEqualTo(Long.valueOf(createAuditDto.userId()));
+        assertThat(actualResult.getAuditAction().name()).isEqualTo(createAuditDto.auditAction());
+        assertThat(actualResult.getAuditDateTime()).isEqualTo(createAuditDto.auditDateTime());
     }
 
 }

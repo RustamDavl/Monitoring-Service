@@ -12,17 +12,13 @@ public class ConnectionUtil {
     private final String URL_KEY = "db.url";
     private final String USERNAME_KEY = "db.username";
 
-
     public Connection getConnection() {
-
         try {
-
             return DriverManager.getConnection(
                     PropertyUtil.getPropertyByKey(URL_KEY),
                     PropertyUtil.getPropertyByKey(USERNAME_KEY),
                     PropertyUtil.getPropertyByKey(PASSWORD_KEY)
             );
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

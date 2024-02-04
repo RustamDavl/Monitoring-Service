@@ -6,10 +6,10 @@ services:
     environment:
       POSTGRES_DB: monitoring-service-db
       POSTGRES_USER: rustd
-      POSTGRES_PASSWORD: amazing
+      POSTGRES_PASSWORD: pass
     restart: always
     volumes:
-      - monitoring-service:/var/lib/postgresql/data
+      - monitoring-service-volume:/var/lib/postgresql/data
     ports:
       - "5433:5432"
 

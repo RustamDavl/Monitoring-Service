@@ -5,7 +5,7 @@ package ru.rstdv.monitoringservice.dto.read;
  * отображение класса Audit, возвращаемое пользователю
  *
  * @param id            идентификатор
- * @param readUserDto   отображение пользователя
+ * @param userId        идентификатор пользователя
  * @param auditDateTime время аудита
  * @param auditAction   действие аудита
  * @param description   дополнительное описание действия
@@ -13,7 +13,7 @@ package ru.rstdv.monitoringservice.dto.read;
  * @version 1.0
  */
 public record ReadAuditDto(String id,
-                           ReadUserDto readUserDto,
+                           String userId,
                            String auditDateTime,
                            String auditAction,
                            String description) {

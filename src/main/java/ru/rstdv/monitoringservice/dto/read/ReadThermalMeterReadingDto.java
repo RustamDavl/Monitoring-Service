@@ -1,10 +1,12 @@
 package ru.rstdv.monitoringservice.dto.read;
 
+import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
+
 /**
  * отображение класса ThermalMeterReading, возвращаемое пользователю
  *
  * @param id                 идентификатор
- * @param readUserDto        отображение пользователя
+ * @param userId             идентификатор пользователя
  * @param gigaCalories       значение в Гкал
  * @param dateOfMeterReading дата внесения показания
  * @author RustamD
@@ -12,20 +14,9 @@ package ru.rstdv.monitoringservice.dto.read;
  */
 public record ReadThermalMeterReadingDto(
         String id,
-        ReadUserDto readUserDto,
+        String userId,
         String gigaCalories,
-        String dateOfMeterReading
+        MeterReadingDate dateOfMeterReading
 
 ) {
-    public String toString() {
-        return """
-                                
-                id : %s 
-                -----------------------
-                giga_calories : %s
-                -----------------------
-                date_of_meter_reading : %s
-                                
-                """.formatted(id, gigaCalories, dateOfMeterReading);
-    }
 }
