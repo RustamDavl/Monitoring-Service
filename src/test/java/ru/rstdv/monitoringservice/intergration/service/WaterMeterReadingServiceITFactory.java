@@ -40,7 +40,7 @@ public class WaterMeterReadingServiceITFactory extends IntegrationTestBase {
         waterMeterReadingRepository = new WaterMeterReadingRepositoryImpl(testConnectionProvider);
         waterMeterMapper = new WaterMeterMapperImpl();
         userMapper = new UserMapperImpl();
-        auditService = new AuditServiceImpl(new AuditRepositoryImpl(testConnectionProvider), new AuditMapperImpl(userMapper), userRepository);
+        auditService = new AuditServiceImpl(new AuditRepositoryImpl(testConnectionProvider), new AuditMapperImpl(), userRepository);
         waterMeterReadingService = new WaterMeterReadingServiceImpl(waterMeterReadingRepository, userRepository, waterMeterMapper, auditService);
 
     }

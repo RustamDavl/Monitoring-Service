@@ -40,7 +40,7 @@ public class ThermalMeterReadingServiceITFactory extends IntegrationTestBase {
         thermalMeterReadingRepository = new ThermalMeterReadingRepositoryImpl(testConnectionProvider);
         thermalMeterMapper = new ThermalMeterMapperImpl();
         userMapper = new UserMapperImpl();
-        auditService = new AuditServiceImpl(new AuditRepositoryImpl(testConnectionProvider), new AuditMapperImpl(userMapper), userRepository);
+        auditService = new AuditServiceImpl(new AuditRepositoryImpl(testConnectionProvider), new AuditMapperImpl(), userRepository);
         thermalMeterReadingService = new ThermalMeterReadingServiceImpl(thermalMeterReadingRepository, userRepository, thermalMeterMapper, auditService);
 
     }

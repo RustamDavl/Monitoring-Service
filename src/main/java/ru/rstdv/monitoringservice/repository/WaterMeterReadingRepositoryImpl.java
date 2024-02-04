@@ -2,12 +2,8 @@ package ru.rstdv.monitoringservice.repository;
 
 import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
-import ru.rstdv.monitoringservice.entity.MeterReading;
-import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
 import ru.rstdv.monitoringservice.util.ConnectionProvider;
-import ru.rstdv.monitoringservice.util.DataBaseTable;
-
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 
 import java.sql.*;

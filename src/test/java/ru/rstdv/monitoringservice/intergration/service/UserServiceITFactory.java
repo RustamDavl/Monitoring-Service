@@ -41,7 +41,7 @@ public class UserServiceITFactory extends IntegrationTestBase {
         LiquibaseUtil.start(testConnectionProvider);
         userRepository = new UserRepositoryImpl(testConnectionProvider);
         userMapper = new UserMapperImpl();
-        auditService = new AuditServiceImpl(new AuditRepositoryImpl(testConnectionProvider), new AuditMapperImpl(userMapper), userRepository);
+        auditService = new AuditServiceImpl(new AuditRepositoryImpl(testConnectionProvider), new AuditMapperImpl(), userRepository);
         userService = new UserServiceImpl(userRepository, new UserMapperImpl(), auditService);
 
     }

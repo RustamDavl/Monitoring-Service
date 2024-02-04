@@ -3,10 +3,7 @@ package ru.rstdv.monitoringservice.repository;
 import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.entity.embeddable.Address;
 import ru.rstdv.monitoringservice.entity.embeddable.Role;
-import ru.rstdv.monitoringservice.service.UserService;
 import ru.rstdv.monitoringservice.util.ConnectionProvider;
-import ru.rstdv.monitoringservice.util.ConnectionUtil;
-import ru.rstdv.monitoringservice.util.DataBaseTable;
 import ru.rstdv.monitoringservice.entity.User;
 
 import java.sql.*;

@@ -2,16 +2,13 @@ package ru.rstdv.monitoringservice.repository;
 
 import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.entity.Audit;
-import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.util.ConnectionProvider;
-import ru.rstdv.monitoringservice.util.DataBaseTable;
+
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 public class AuditRepositoryImpl implements AuditRepository {

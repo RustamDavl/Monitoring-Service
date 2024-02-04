@@ -2,12 +2,9 @@ package ru.rstdv.monitoringservice.repository;
 
 import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
-import ru.rstdv.monitoringservice.entity.Audit;
-import ru.rstdv.monitoringservice.entity.MeterReading;
-import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
 import ru.rstdv.monitoringservice.util.ConnectionProvider;
-import ru.rstdv.monitoringservice.util.DataBaseTable;
+
 
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 
@@ -49,20 +46,6 @@ public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository
             SELECT id, user_id, giga_calories, meter_reading_year, meter_reading_month, meter_reading_day
             FROM thermal_meter_reading
             """;
-
-    //    private static final ThermalMeterReadingRepositoryImpl INSTANCE = new ThermalMeterReadingRepositoryImpl();
-//    private static final DataBaseTable<ThermalMeterReading> THERMAL_METER_TABLE = new DataBaseTable<>();
-//
-//    private ThermalMeterReadingRepositoryImpl() {
-//    }
-//
-//    public static ThermalMeterReadingRepositoryImpl getInstance() {
-//        return INSTANCE;
-//    }
-//
-//    public static void clearDataBase() {
-//        THERMAL_METER_TABLE.clear();
-//    }
     @Override
     public ThermalMeterReading save(ThermalMeterReading thermalMeterReading) {
         try (Connection connection = connectionProvider.getConnection();
