@@ -9,6 +9,12 @@ import ru.rstdv.monitoringservice.entity.embeddable.Role;
 
 import java.util.List;
 
+/**
+ * сущность пользователя, сохраняемая в таблицу базы данных
+ *
+ * @author RustamD
+ * @version 1.0
+ */
 @Data
 @Builder
 @AllArgsConstructor

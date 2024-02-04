@@ -47,8 +47,8 @@ public class ConsoleApplication {
 //            thermalMeterMapper,
 //            auditServiceImpl
 //    );
-
-
+//
+//
 //    public void start() {
 //        AdminPlaceholder.addAdmin();
 //        Scanner scanner = new Scanner(System.in);

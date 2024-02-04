@@ -1,7 +1,7 @@
 package ru.rstdv.monitoringservice.exception;
 
 /**
- * исключение, которое выбрасывается при ненайденном пользователе
+ * исключение, которое выбрасывается когда не удалось найти пользователя
  */
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String message) {

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 @RequiredArgsConstructor
 public class TestConnectionProvider implements ConnectionProvider {
@@ -16,9 +17,14 @@ public class TestConnectionProvider implements ConnectionProvider {
     @Override
     public Connection getConnection() {
         try {
-            return DriverManager.getConnection(url, username, password);
+            Properties properties = new Properties();
+            properties.setProperty("user", username);
+            properties.setProperty("password", password);
+            properties.setProperty("currentSchema", "monitoring_service");
+            return DriverManager.getConnection(url, properties);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 }

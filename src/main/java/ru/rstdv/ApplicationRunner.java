@@ -9,7 +9,7 @@ import ru.rstdv.monitoringservice.util.LiquibaseUtil;
  */
 public class ApplicationRunner {
     public static void main(String[] args) {
-        //new LiquibaseUtil(new CommonConnectionProvider()).start();
+
         LiquibaseUtil.start(new CommonConnectionProvider());
 //        ConsoleApplication consoleApplication = new ConsoleApplication();
 //        consoleApplication.start();

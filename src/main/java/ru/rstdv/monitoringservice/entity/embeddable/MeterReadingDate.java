@@ -9,6 +9,13 @@ import java.time.LocalTime;
 import java.time.MonthDay;
 import java.time.Year;
 
+
+/**
+ * встариваемый класс, представляющий дату отправки показателей счетчика
+ *
+ * @author RustamD
+ * @version 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

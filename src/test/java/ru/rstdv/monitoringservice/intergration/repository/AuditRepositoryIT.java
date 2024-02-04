@@ -1,5 +1,10 @@
 package ru.rstdv.monitoringservice.intergration.repository;
 
+import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.resource.ClassLoaderResourceAccessor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,14 +15,16 @@ import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.util.LiquibaseUtil;
 import ru.rstdv.monitoringservice.util.TestConnectionProvider;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.time.LocalDateTime;
+import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuditRepositoryIT extends IntegrationTestBase {
     private AuditRepository auditRepository;
     private UserRepository userRepository;
-
 
 
     @BeforeEach
@@ -27,6 +34,7 @@ public class AuditRepositoryIT extends IntegrationTestBase {
                 container.getUsername(),
                 container.getPassword()
         );
+
         LiquibaseUtil.start(testConnectionProvider);
         auditRepository = new AuditRepositoryImpl(testConnectionProvider);
         userRepository = new UserRepositoryImpl(testConnectionProvider);
@@ -34,7 +42,7 @@ public class AuditRepositoryIT extends IntegrationTestBase {
 
     @AfterEach
     void clear() {
-       LiquibaseUtil.dropAll();
+        LiquibaseUtil.dropAll();
     }
 
     @Test

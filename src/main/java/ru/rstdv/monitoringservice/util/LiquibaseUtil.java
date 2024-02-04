@@ -15,10 +15,15 @@ public class LiquibaseUtil {
 
     private ConnectionProvider connectionProvider;
     private Liquibase liquibase;
+
     public void start(ConnectionProvider connectionProvider) {
         try {
             Connection connection = connectionProvider.getConnection();
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+
+            database.setLiquibaseSchemaName("liquibase");
+            database.setDefaultSchemaName("monitoring_service");
+
             liquibase =
                     new Liquibase("db/changelog/db.changelog-master.yaml", new ClassLoaderResourceAccessor(), database);
 

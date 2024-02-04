@@ -6,11 +6,15 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 public abstract class IntegrationTestBase {
 
-    protected static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:16.0");
+    protected static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:16.0")
+            .withInitScript("init.sql");
 
     @BeforeAll
     static void beforeAll() {
+
         container.start();
+
+
     }
 
     @AfterAll
