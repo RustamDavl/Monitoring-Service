@@ -1,4 +1,4 @@
-package ru.rstdv.monitoringservice.intergration.util;
+package ru.rstdv.monitoringservice.util;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;

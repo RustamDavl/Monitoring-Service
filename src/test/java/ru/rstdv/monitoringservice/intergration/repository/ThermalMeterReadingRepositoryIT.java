@@ -1,14 +1,13 @@
 package ru.rstdv.monitoringservice.intergration.repository;
 
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
-import ru.rstdv.monitoringservice.intergration.util.IntegrationTestBase;
+import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.repository.MeterReadingRepository;
 import ru.rstdv.monitoringservice.repository.ThermalMeterReadingRepositoryImpl;
 import ru.rstdv.monitoringservice.repository.UserRepository;

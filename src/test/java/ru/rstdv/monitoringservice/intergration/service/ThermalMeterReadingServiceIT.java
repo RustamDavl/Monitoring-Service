@@ -9,7 +9,7 @@ import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFoundException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
-import ru.rstdv.monitoringservice.intergration.util.IntegrationTestBase;
+import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.mapper.*;
 import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.service.*;

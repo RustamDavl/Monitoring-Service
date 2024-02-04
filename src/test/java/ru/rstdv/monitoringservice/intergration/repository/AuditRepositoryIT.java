@@ -1,12 +1,11 @@
 package ru.rstdv.monitoringservice.intergration.repository;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.entity.Audit;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
-import ru.rstdv.monitoringservice.intergration.util.IntegrationTestBase;
+import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.util.LiquibaseUtil;
 import ru.rstdv.monitoringservice.util.TestConnectionProvider;

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.entity.Audit;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
-import ru.rstdv.monitoringservice.intergration.util.IntegrationTestBase;
+import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.mapper.AuditMapper;
 import ru.rstdv.monitoringservice.mapper.AuditMapperImpl;
 import ru.rstdv.monitoringservice.mapper.UserMapper;

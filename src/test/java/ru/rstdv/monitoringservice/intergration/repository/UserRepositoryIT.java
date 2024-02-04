@@ -5,13 +5,12 @@ import org.junit.jupiter.api.*;
 import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.embeddable.Address;
 import ru.rstdv.monitoringservice.entity.embeddable.Role;
-import ru.rstdv.monitoringservice.intergration.util.IntegrationTestBase;
+import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.repository.UserRepository;
 import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
 import ru.rstdv.monitoringservice.util.LiquibaseUtil;
 import ru.rstdv.monitoringservice.util.TestConnectionProvider;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
