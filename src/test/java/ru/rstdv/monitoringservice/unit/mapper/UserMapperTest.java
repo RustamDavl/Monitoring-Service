@@ -3,22 +3,20 @@ package ru.rstdv.monitoringservice.unit.mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
-import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
 import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.embeddable.Address;
 import ru.rstdv.monitoringservice.entity.embeddable.Role;
 import ru.rstdv.monitoringservice.mapper.UserMapper;
-import ru.rstdv.monitoringservice.mapper.UserMapperImpl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserMapperTestFactory {
+public class UserMapperTest {
 
     private UserMapper userMapper;
 
     @BeforeEach
     void setUp() {
-        userMapper = new UserMapperImpl();
+        userMapper = UserMapper.INSTANCE;
     }
 
     @Test

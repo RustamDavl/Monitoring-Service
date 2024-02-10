@@ -2,15 +2,18 @@ package ru.rstdv.monitoringservice.intergration.service;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
-import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFoundException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
+import ru.rstdv.monitoringservice.factory.RepositoryFactory;
+import ru.rstdv.monitoringservice.factory.RepositoryFactoryImpl;
+import ru.rstdv.monitoringservice.factory.ServiceFactory;
+import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
 import ru.rstdv.monitoringservice.util.IntegrationTestBase;
-import ru.rstdv.monitoringservice.mapper.*;
 import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.service.*;
 import ru.rstdv.monitoringservice.util.LiquibaseUtil;
@@ -18,31 +21,25 @@ import ru.rstdv.monitoringservice.util.TestConnectionProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WaterMeterReadingServiceITFactory extends IntegrationTestBase {
+public class WaterMeterReadingServiceIT extends IntegrationTestBase {
 
     private UserRepository userRepository;
-    private AuditService auditService;
-    private WaterMeterMapper waterMeterMapper;
-
-    private UserMapper userMapper;
-    private MeterReadingRepository<WaterMeterReading> waterMeterReadingRepository;
     private MeterReadingService<ReadWaterMeterReadingDto, CreateUpdateWaterMeterReadingDto> waterMeterReadingService;
+    private ServiceFactory serviceFactory;
+    private RepositoryFactory repositoryFactory;
 
     @BeforeEach
     void setUp() {
-        TestConnectionProvider testConnectionProvider = new TestConnectionProvider(
+        connectionProvider = new TestConnectionProvider(
                 container.getJdbcUrl(),
                 container.getUsername(),
                 container.getPassword()
         );
-        LiquibaseUtil.start(testConnectionProvider);
-        userRepository = new UserRepositoryImpl(testConnectionProvider);
-        waterMeterReadingRepository = new WaterMeterReadingRepositoryImpl(testConnectionProvider);
-        waterMeterMapper = new WaterMeterMapperImpl();
-        userMapper = new UserMapperImpl();
-        auditService = new AuditServiceImpl(new AuditRepositoryImpl(testConnectionProvider), new AuditMapperImpl(), userRepository);
-        waterMeterReadingService = new WaterMeterReadingServiceImpl(waterMeterReadingRepository, userRepository, waterMeterMapper, auditService);
-
+        LiquibaseUtil.start(connectionProvider);
+        serviceFactory = new ServiceFactoryImpl();
+        repositoryFactory = new RepositoryFactoryImpl();
+        userRepository = repositoryFactory.createUserRepository();
+        waterMeterReadingService = serviceFactory.createWaterMeterReadingService();
     }
 
     @AfterEach
@@ -50,7 +47,7 @@ public class WaterMeterReadingServiceITFactory extends IntegrationTestBase {
         LiquibaseUtil.dropAll();
     }
 
-
+    @DisplayName("save should pass")
     @Test
     void save_should_pass() {
         var user = userRepository.findById(2L).get();
@@ -67,6 +64,7 @@ public class WaterMeterReadingServiceITFactory extends IntegrationTestBase {
         assertThat(savedThermalMeterReading.hotWater()).isEqualTo(request.hotWater());
     }
 
+    @DisplayName("save should throw UserNotFoundException")
     @Test
     void save_should_throw_UserNotFoundException() {
         var createUpdateWaterMeterReadingDto = new CreateUpdateWaterMeterReadingDto(
@@ -75,9 +73,9 @@ public class WaterMeterReadingServiceITFactory extends IntegrationTestBase {
                 "123"
         );
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, () -> waterMeterReadingService.save(createUpdateWaterMeterReadingDto));
-
     }
 
+    @DisplayName("find actual by user id should pass")
     @Test
     void findActualByUserId_should_pass() {
         var actual = waterMeterReadingService.findActualByUserId(2L);
@@ -88,17 +86,20 @@ public class WaterMeterReadingServiceITFactory extends IntegrationTestBase {
         assertThat(actual.dateOfMeterReading().getMonthDay()).isEqualTo(20);
     }
 
+    @DisplayName("find actual by user id should throw UserNotFoundException")
     @Test
     void findActualByUserId_should_throw_UserNotFoundException() {
         org.junit.jupiter.api.Assertions.assertThrows(UserNotFoundException.class, () -> waterMeterReadingService.findActualByUserId(30L));
     }
 
+    @DisplayName("find all by user id")
     @Test
     void findAllByUserId() {
         var thermalMeterReadings = waterMeterReadingService.findAllByUserId(2L);
         assertThat(thermalMeterReadings).hasSize(3);
     }
 
+    @DisplayName("find by month and user id should pass")
     @Test
     void findByMonthAndUserId_should_pass() {
         var actual = waterMeterReadingService.findByMonthAndUserId(new MonthFilterImpl(3), 2L);
@@ -107,9 +108,9 @@ public class WaterMeterReadingServiceITFactory extends IntegrationTestBase {
         assertThat(actual.dateOfMeterReading().getYear().getValue()).isEqualTo(2023);
         assertThat(actual.dateOfMeterReading().getMonth()).isEqualTo(3);
         assertThat(actual.dateOfMeterReading().getMonthDay()).isEqualTo(20);
-
     }
 
+    @DisplayName("find by month and user id should throw MeterReadingNotFound")
     @Test
     void findByMonthAndUserId_should_throw_MeterReadingNotFound() {
         org.junit.jupiter.api.Assertions.assertThrows(MeterReadingNotFoundException.class,

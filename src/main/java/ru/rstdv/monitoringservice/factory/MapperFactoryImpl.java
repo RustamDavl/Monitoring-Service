@@ -1,22 +1,28 @@
 package ru.rstdv.monitoringservice.factory;
 
-import ru.rstdv.monitoringservice.mapper.*;
+import ru.rstdv.monitoringservice.mapper.AuditMapper;
+import ru.rstdv.monitoringservice.mapper.ThermalMeterMapper;
+import ru.rstdv.monitoringservice.mapper.UserMapper;
+import ru.rstdv.monitoringservice.mapper.WaterMeterMapper;
 
 public class MapperFactoryImpl implements MapperFactory {
     @Override
     public UserMapper createUserMapper() {
-        return new UserMapperImpl();
+        return UserMapper.INSTANCE;
     }
+
     @Override
     public ThermalMeterMapper createThermalMeterMapper() {
-        return new ThermalMeterMapperImpl();
+        return ThermalMeterMapper.INSTANCE;
     }
+
     @Override
     public WaterMeterMapper createWaterMeterMapper() {
-        return new WaterMeterMapperImpl();
+        return WaterMeterMapper.INSTANCE;
     }
+
     @Override
     public AuditMapper createAuditMapper() {
-        return new AuditMapperImpl();
+        return AuditMapper.INSTANCE;
     }
 }

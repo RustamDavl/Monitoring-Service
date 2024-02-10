@@ -6,19 +6,20 @@ import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadi
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
+
 import ru.rstdv.monitoringservice.mapper.ThermalMeterMapper;
-import ru.rstdv.monitoringservice.mapper.ThermalMeterMapperImpl;
+
 import java.time.Year;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ThermalMeterMapperTestFactory {
+public class ThermalMeterMapperTest {
 
     private ThermalMeterMapper thermalMeterMapper;
 
     @BeforeEach
     void setUp() {
-        thermalMeterMapper = new ThermalMeterMapperImpl();
+        thermalMeterMapper = ThermalMeterMapper.INSTANCE;
     }
 
     @Test
@@ -44,14 +45,11 @@ public class ThermalMeterMapperTestFactory {
 
     @Test
     void toThermalReading() {
-        var user = User.builder()
-                .id(1L)
-                .build();
         var createUpdateThermalMeterReadingDto = new CreateUpdateThermalMeterReadingDto(
                 "1",
                 "123.4"
         );
-        var actualResult = thermalMeterMapper.toThermalMeterReading(createUpdateThermalMeterReadingDto, user);
+        var actualResult = thermalMeterMapper.toThermalMeterReading(createUpdateThermalMeterReadingDto);
 
         assertThat(actualResult.getUserId()).isEqualTo(Long.valueOf(createUpdateThermalMeterReadingDto.userId()));
         assertThat(actualResult.getGigaCalories()).isEqualTo(Float.valueOf(createUpdateThermalMeterReadingDto.gigaCalories()));

@@ -1,15 +1,22 @@
 package ru.rstdv.monitoringservice.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.factory.Mappers;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
 import ru.rstdv.monitoringservice.entity.User;
-import ru.rstdv.monitoringservice.entity.embeddable.Address;
-import ru.rstdv.monitoringservice.entity.embeddable.Role;
 
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
 
-    public ReadUserDto toReadUserDto(User user);
+    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    ReadUserDto toReadUserDto(User user);
 
 
-    public User toUser(CreateUpdateUserDto from);
+    @Mapping(target = "address.city", source = "city")
+    @Mapping(target = "address.street", source = "street")
+    @Mapping(target = "address.houseNumber", source = "houseNumber")
+    User toUser(CreateUpdateUserDto from);
 }

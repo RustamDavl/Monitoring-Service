@@ -1,9 +1,11 @@
 package ru.rstdv.monitoringservice.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.factory.Mappers;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.read.ReadAuditDto;
 import ru.rstdv.monitoringservice.entity.Audit;
-import ru.rstdv.monitoringservice.entity.User;
 
 /**
  * интерфейс AuditMapper необходим для маппинга сущностей
@@ -11,7 +13,10 @@ import ru.rstdv.monitoringservice.entity.User;
  * @author RustamD
  * @version 1.0
  */
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AuditMapper {
+
+    AuditMapper INSTANCE = Mappers.getMapper(AuditMapper.class);
 
     /**
      * маппит объект типа Audit в ReadAuditDto, который передается пользователю
@@ -25,9 +30,8 @@ public interface AuditMapper {
      * маппит объект типа CreateAuditDto в Audit, который сохраняется в базу
      *
      * @param createAuditDto созданный аудит
-     * @param user           пользователь, аудит которого сохраняется
      * @return сохраняемый audit
      */
-    Audit toAudit(CreateAuditDto createAuditDto, User user);
+    Audit toAudit(CreateAuditDto createAuditDto);
 
 }

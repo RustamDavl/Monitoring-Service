@@ -21,57 +21,54 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> {
 
-    private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepositoryImpl;
-    private final UserRepository userRepositoryImpl;
-    private final ThermalMeterMapper thermalMeterMapperImpl;
-    private final AuditService auditServiceImpl;
+    private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository;
+    private final UserRepository userRepository;
+    private final ThermalMeterMapper thermalMeterMapper;
+    private final AuditService auditService;
 
 
     @Override
     public ReadThermalMeterReadingDto save(CreateUpdateThermalMeterReadingDto object) {
         var userId = object.userId();
-        var maybeUser = userRepositoryImpl.findById(Long.valueOf(userId))
+        var maybeUser = userRepository.findById(Long.valueOf(userId))
                 .orElseThrow(() -> new UserNotFoundException("there is no user with id " + userId));
 
-        var thermalMeterReadingToSave = thermalMeterMapperImpl.toThermalMeterReading(
-                object,
-                maybeUser
-        );
-        var savedThermalMeterReading = thermalMeterReadingRepositoryImpl.save(thermalMeterReadingToSave);
+        var thermalMeterReadingToSave = thermalMeterMapper.toThermalMeterReading(object);
+        var savedThermalMeterReading = thermalMeterReadingRepository.save(thermalMeterReadingToSave);
 
-//        auditServiceImpl.saveAudit(new CreateAuditDto(
-//                object.userId(),
-//                AuditAction.THERMAL_METER_READING_SENDING.name()
-//               // thermalMeterReadingToSave.getDateOfMeterReading(),
-//
-//        ));
+        auditService.saveAudit(new CreateAuditDto(
+                userId,
+                AuditAction.THERMAL_METER_READING_SENDING.name(),
+                LocalDateTime.now(),
+                "thermal meter reading saved"
+        ));
 
 
-        return thermalMeterMapperImpl.toReadThermalMeterReadingDto(
+        return thermalMeterMapper.toReadThermalMeterReadingDto(
                 savedThermalMeterReading);
     }
 
     @Override
     public ReadThermalMeterReadingDto findActualByUserId(Long id) {
-        var maybeThermalMeter = thermalMeterReadingRepositoryImpl.findActualByUserId(id)
+        var maybeThermalMeter = thermalMeterReadingRepository.findActualByUserId(id)
                 .orElseThrow(() -> new UserNotFoundException("there is no user with id " + id));
 
-        auditServiceImpl.saveAudit(new CreateAuditDto(
+        auditService.saveAudit(new CreateAuditDto(
                 id.toString(),
                 AuditAction.GET_ACTUAL_THERMAL_METER_READING.name(),
                 LocalDateTime.now(),
                 "get actual result"
         ));
-        return thermalMeterMapperImpl.toReadThermalMeterReadingDto(maybeThermalMeter);
+        return thermalMeterMapper.toReadThermalMeterReadingDto(maybeThermalMeter);
     }
 
     @Override
     public List<ReadThermalMeterReadingDto> findAllByUserId(Long id) {
-        var list = thermalMeterReadingRepositoryImpl.findAllByUserId(id)
+        var list = thermalMeterReadingRepository.findAllByUserId(id)
                 .stream()
-                .map(thermalMeterMapperImpl::toReadThermalMeterReadingDto)
+                .map(thermalMeterMapper::toReadThermalMeterReadingDto)
                 .toList();
-        auditServiceImpl.saveAudit(
+        auditService.saveAudit(
                 new CreateAuditDto(
                         id.toString(),
                         AuditAction.GET_THERMAL_READING_HISTORY.name(),
@@ -86,11 +83,11 @@ public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadT
     public ReadThermalMeterReadingDto findByMonthAndUserId(MonthFilter monthFilter, Long id) {
         if (!isMonthValueCorrect(monthFilter.getMonthNumber()))
             throw new IncorrectMonthValueException("month value must be between [1, 12] but your value is : " + monthFilter.getMonthNumber());
-        var readThermalMeterReadingDto = thermalMeterReadingRepositoryImpl.findByMonthAndUserId(monthFilter, id)
-                .map(thermalMeterMapperImpl::toReadThermalMeterReadingDto)
+        var readThermalMeterReadingDto = thermalMeterReadingRepository.findByMonthAndUserId(monthFilter, id)
+                .map(thermalMeterMapper::toReadThermalMeterReadingDto)
                 .orElseThrow(() -> new MeterReadingNotFoundException("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
 
-        auditServiceImpl.saveAudit(
+        auditService.saveAudit(
                 new CreateAuditDto(
                         id.toString(),
                         AuditAction.GET_THERMAL_READING_BY_MONTH.name(),
@@ -104,9 +101,9 @@ public class ThermalMeterReadingServiceImpl implements MeterReadingService<ReadT
 
     @Override
     public List<ReadThermalMeterReadingDto> findAll() {
-        return thermalMeterReadingRepositoryImpl.findAll()
+        return thermalMeterReadingRepository.findAll()
                 .stream()
-                .map(thermalMeterMapperImpl::toReadThermalMeterReadingDto)
+                .map(thermalMeterMapper::toReadThermalMeterReadingDto)
                 .toList();
     }
 

@@ -33,7 +33,6 @@ public class ServiceFactoryImpl implements ServiceFactory {
 
     @Override
     public AuditService createAuditService() {
-        return new AuditServiceImpl(repositoryFactoryImpl.createAuditRepository(), mapperFactoryImpl.createAuditMapper(),
-                repositoryFactoryImpl.createUserRepository());
+        return new AuditServiceImpl(repositoryFactoryImpl.createAuditRepository(), mapperFactoryImpl.createAuditMapper());
     }
 }

@@ -21,59 +21,56 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWaterMeterReadingDto, CreateUpdateWaterMeterReadingDto> {
 
-    private final MeterReadingRepository<WaterMeterReading> waterMeterReadingRepositoryImpl;
-    private final UserRepository userRepositoryImpl;
-    private final WaterMeterMapper waterMeterMapperImpl;
-    private final AuditService auditServiceImpl;
+    private final MeterReadingRepository<WaterMeterReading> waterMeterReadingRepository;
+    private final UserRepository userRepository;
+    private final WaterMeterMapper waterMeterMapper;
+    private final AuditService auditService;
 
 
     @Override
     public ReadWaterMeterReadingDto save(CreateUpdateWaterMeterReadingDto object) {
         var userId = object.userId();
-        var maybeUser = userRepositoryImpl.findById(Long.valueOf(userId))
+        var maybeUser = userRepository.findById(Long.valueOf(userId))
                 .orElseThrow(() -> new UserNotFoundException(""));
 
-        var waterMeterReadingToSave = waterMeterMapperImpl.toWaterMeterReading(
-                object,
-                maybeUser
+        var waterMeterReadingToSave = waterMeterMapper.toWaterMeterReading(
+                object
         );
-//        waterMeterReadingToSave.setDateOfMeterReading(LocalDateTime.now());
-        var savedWaterMeterReading = waterMeterReadingRepositoryImpl.save(waterMeterReadingToSave);
+        var savedWaterMeterReading = waterMeterReadingRepository.save(waterMeterReadingToSave);
 
-        auditServiceImpl.saveAudit(new CreateAuditDto(
+        auditService.saveAudit(new CreateAuditDto(
                 object.userId(),
                 AuditAction.WATER_METER_READING_SENDING.name(),
                 LocalDateTime.now(),
-                "water meter readings saved"
+                "water meter readings was saved"
         ));
-
-        return waterMeterMapperImpl.toReadWaterMeterReadingDto(savedWaterMeterReading);
+        return waterMeterMapper.toReadWaterMeterReadingDto(savedWaterMeterReading);
     }
 
     @Override
     public ReadWaterMeterReadingDto findActualByUserId(Long id) {
-        var maybeWaterMeter = waterMeterReadingRepositoryImpl.findActualByUserId(id)
+        var maybeWaterMeter = waterMeterReadingRepository.findActualByUserId(id)
                 .orElseThrow(() -> new UserNotFoundException("there is no user with id " + id));
 
-        auditServiceImpl.saveAudit(new CreateAuditDto(
+        auditService.saveAudit(new CreateAuditDto(
                 id.toString(),
                 AuditAction.GET_ACTUAL_WATER_METER_READING.name(),
                 LocalDateTime.now(),
                 "get actual result"
         ));
-        return waterMeterMapperImpl.toReadWaterMeterReadingDto(
+        return waterMeterMapper.toReadWaterMeterReadingDto(
                 maybeWaterMeter
         );
     }
 
     @Override
     public List<ReadWaterMeterReadingDto> findAllByUserId(Long id) {
-        var list = waterMeterReadingRepositoryImpl.findAllByUserId(id)
+        var list = waterMeterReadingRepository.findAllByUserId(id)
                 .stream()
-                .map(waterMeterMapperImpl::toReadWaterMeterReadingDto)
+                .map(waterMeterMapper::toReadWaterMeterReadingDto)
                 .toList();
 
-        auditServiceImpl.saveAudit(new CreateAuditDto(
+        auditService.saveAudit(new CreateAuditDto(
                 id.toString(),
                 AuditAction.GET_WATER_READING_HISTORY.name(),
                 LocalDateTime.now(),
@@ -87,11 +84,11 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
         if (!isMonthValueCorrect(monthFilter.getMonthNumber()))
             throw new IncorrectMonthValueException("month value must be between [1, 12] but your value is : " + monthFilter.getMonthNumber());
 
-        var list = waterMeterReadingRepositoryImpl.findByMonthAndUserId(monthFilter, id)
-                .map(waterMeterMapperImpl::toReadWaterMeterReadingDto)
+        var list = waterMeterReadingRepository.findByMonthAndUserId(monthFilter, id)
+                .map(waterMeterMapper::toReadWaterMeterReadingDto)
                 .orElseThrow(() -> new MeterReadingNotFoundException("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
 
-        auditServiceImpl.saveAudit(
+        auditService.saveAudit(
                 new CreateAuditDto(
                         id.toString(),
                         AuditAction.GET_WATER_READING_BY_MONTH.name(),
@@ -104,9 +101,9 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
 
     @Override
     public List<ReadWaterMeterReadingDto> findAll() {
-        return waterMeterReadingRepositoryImpl.findAll()
+        return waterMeterReadingRepository.findAll()
                 .stream()
-                .map(waterMeterMapperImpl::toReadWaterMeterReadingDto)
+                .map(waterMeterMapper::toReadWaterMeterReadingDto)
                 .toList();
     }
 

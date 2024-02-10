@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
-public class WaterMeterReadingServiceTestFactory {
+public class WaterMeterReadingServiceTest {
     @Mock
     private UserRepository userRepositoryImpl;
 
@@ -58,7 +58,7 @@ public class WaterMeterReadingServiceTestFactory {
         var readThermalMeterReadingDto = getReadWaterMeterReadingDto();
 
         doReturn(Optional.of(user)).when(userRepositoryImpl).findById(1L);
-        doReturn(waterMeterReading).when(waterMeterMapperImpl).toWaterMeterReading(createUpdateWaterMeterReadingDto, user);
+        doReturn(waterMeterReading).when(waterMeterMapperImpl).toWaterMeterReading(createUpdateWaterMeterReadingDto);
         doReturn(savedWaterMeterReading).when(waterMeterReadingRepositoryImpl).save(waterMeterReading);
         doReturn(readThermalMeterReadingDto).when(waterMeterMapperImpl).toReadWaterMeterReadingDto(savedWaterMeterReading);
 

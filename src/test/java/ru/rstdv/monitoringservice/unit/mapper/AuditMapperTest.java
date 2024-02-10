@@ -7,18 +7,17 @@ import ru.rstdv.monitoringservice.entity.Audit;
 import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.mapper.AuditMapper;
-import ru.rstdv.monitoringservice.mapper.AuditMapperImpl;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AuditMapperTestFactory {
+public class AuditMapperTest {
     private AuditMapper auditMapper;
 
     @BeforeEach
     void setUp() {
-        auditMapper = new AuditMapperImpl();
+        auditMapper = AuditMapper.INSTANCE;
     }
 
     @Test
@@ -53,7 +52,7 @@ public class AuditMapperTestFactory {
                 auditLocalDateTime,
                 "descr"
         );
-        var actualResult = auditMapper.toAudit(createAuditDto, user);
+        var actualResult = auditMapper.toAudit(createAuditDto);
 
         assertThat(actualResult.getUserId()).isEqualTo(Long.valueOf(createAuditDto.userId()));
         assertThat(actualResult.getAuditAction().name()).isEqualTo(createAuditDto.auditAction());

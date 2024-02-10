@@ -1,12 +1,8 @@
 package ru.rstdv.monitoringservice.intergration.repository;
 
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseFactory;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.resource.ClassLoaderResourceAccessor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.entity.Audit;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
@@ -15,14 +11,11 @@ import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.util.LiquibaseUtil;
 import ru.rstdv.monitoringservice.util.TestConnectionProvider;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.time.LocalDateTime;
-import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AuditRepositoryITFactory extends IntegrationTestBase {
+public class AuditRepositoryIT extends IntegrationTestBase {
     private AuditRepository auditRepository;
     private UserRepository userRepository;
 
@@ -45,6 +38,7 @@ public class AuditRepositoryITFactory extends IntegrationTestBase {
         LiquibaseUtil.dropAll();
     }
 
+    @DisplayName("save")
     @Test
     void save() {
         var user = userRepository.findById(2L).get();
@@ -64,6 +58,7 @@ public class AuditRepositoryITFactory extends IntegrationTestBase {
 
     }
 
+    @DisplayName("find by user id")
     @Test
     void findByUserId() {
         var audits = auditRepository.findByUserId(3L);

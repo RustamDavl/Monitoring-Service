@@ -7,20 +7,19 @@ import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
 import ru.rstdv.monitoringservice.mapper.WaterMeterMapper;
-import ru.rstdv.monitoringservice.mapper.WaterMeterMapperImpl;
 
 import java.time.LocalDateTime;
 import java.time.Year;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WaterMeterMapperTestFactory {
+public class WaterMeterMapperTest {
 
     private WaterMeterMapper waterMeterMapper;
 
     @BeforeEach
     void setUp() {
-        waterMeterMapper = new WaterMeterMapperImpl();
+        waterMeterMapper = WaterMeterMapper.INSTANCE;
     }
 
     @Test
@@ -57,7 +56,7 @@ public class WaterMeterMapperTestFactory {
                 "222",
                 "111"
         );
-        var actualResult = waterMeterMapper.toWaterMeterReading(createUpdateWaterMeterReadingDto, user);
+        var actualResult = waterMeterMapper.toWaterMeterReading(createUpdateWaterMeterReadingDto);
 
         assertThat(actualResult.getUserId()).isEqualTo(Long.valueOf(createUpdateWaterMeterReadingDto.userId()));
         assertThat(actualResult.getColdWater()).isEqualTo(Integer.valueOf(createUpdateWaterMeterReadingDto.coldWater()));

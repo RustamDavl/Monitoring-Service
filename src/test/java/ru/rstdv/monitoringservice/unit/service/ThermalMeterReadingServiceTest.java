@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
-public class ThermalMeterReadingServiceTestFactory {
+public class ThermalMeterReadingServiceTest {
     @Mock
     private UserRepository userRepositoryImpl;
     @Mock
@@ -53,7 +53,7 @@ public class ThermalMeterReadingServiceTestFactory {
         var readThermalMeterReadingDto = getReadThermalMeterReadingDto();
 
         doReturn(Optional.of(user)).when(userRepositoryImpl).findById(1L);
-        doReturn(thermalMeterReading).when(thermalMeterMapperImpl).toThermalMeterReading(createUpdateThermalMeterReadingDto, user);
+        doReturn(thermalMeterReading).when(thermalMeterMapperImpl).toThermalMeterReading(createUpdateThermalMeterReadingDto);
         doReturn(savedThermalMeterReading).when(thermalMeterReadingRepositoryImpl).save(thermalMeterReading);
         doReturn(readThermalMeterReadingDto).when(thermalMeterMapperImpl).toReadThermalMeterReadingDto(savedThermalMeterReading);
 

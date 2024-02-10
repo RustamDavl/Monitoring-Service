@@ -3,6 +3,7 @@ package ru.rstdv.monitoringservice.intergration.repository;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
@@ -20,20 +21,20 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ThermalMeterReadingRepositoryITFactory extends IntegrationTestBase {
+public class ThermalMeterReadingRepositoryIT extends IntegrationTestBase {
     private MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository;
     private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
-        TestConnectionProvider testConnectionProvider = new TestConnectionProvider(
+         connectionProvider = new TestConnectionProvider(
                 container.getJdbcUrl(),
                 container.getUsername(),
                 container.getPassword()
         );
-        LiquibaseUtil.start(testConnectionProvider);
-        thermalMeterReadingRepository = new ThermalMeterReadingRepositoryImpl(testConnectionProvider);
-        userRepository = new UserRepositoryImpl(testConnectionProvider);
+        LiquibaseUtil.start(connectionProvider);
+        thermalMeterReadingRepository = new ThermalMeterReadingRepositoryImpl(connectionProvider);
+        userRepository = new UserRepositoryImpl(connectionProvider);
     }
 
     @AfterEach
@@ -41,6 +42,7 @@ public class ThermalMeterReadingRepositoryITFactory extends IntegrationTestBase 
        LiquibaseUtil.dropAll();
     }
 
+    @DisplayName("save")
     @Test
     void save() {
         var user = userRepository.findById(2L);
@@ -63,6 +65,7 @@ public class ThermalMeterReadingRepositoryITFactory extends IntegrationTestBase 
         );
     }
 
+    @DisplayName("find actual by user id")
     @Test
     void findActualByUserId() {
         var actual = thermalMeterReadingRepository.findActualByUserId(2L);
@@ -75,12 +78,14 @@ public class ThermalMeterReadingRepositoryITFactory extends IntegrationTestBase 
     }
 
 
+    @DisplayName("find all by user id")
     @Test
     void findAllByUserId() {
         var meters = thermalMeterReadingRepository.findAllByUserId(2L);
         assertThat(meters).hasSize(3);
     }
 
+    @DisplayName("find by month and user id should return not empty optional")
     @Test
     void findByMonthAndUserId_should_return_not_empty_optional() {
         var maybeResult = thermalMeterReadingRepository.
@@ -90,6 +95,7 @@ public class ThermalMeterReadingRepositoryITFactory extends IntegrationTestBase 
 
     }
 
+    @DisplayName("find by month and user id should return empty optional")
     @Test
     void findByMonthAndUserId_should_return_empty_optional() {
         var maybeResult = thermalMeterReadingRepository.

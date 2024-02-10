@@ -18,18 +18,18 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class UserRepositoryITFactory extends IntegrationTestBase {
+public class UserRepositoryIT extends IntegrationTestBase {
     private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
-        TestConnectionProvider testConnectionProvider = new TestConnectionProvider(
+        connectionProvider = new TestConnectionProvider(
                 container.getJdbcUrl(),
                 container.getUsername(),
                 container.getPassword()
         );
-        LiquibaseUtil.start(testConnectionProvider);
-        userRepository = new UserRepositoryImpl(testConnectionProvider);
+        LiquibaseUtil.start(connectionProvider);
+        userRepository = new UserRepositoryImpl(connectionProvider);
     }
 
     @AfterEach
@@ -37,6 +37,7 @@ public class UserRepositoryITFactory extends IntegrationTestBase {
         LiquibaseUtil.dropAll();
     }
 
+    @DisplayName("save")
     @Test
     void save() {
         var user1 = userRepository.save(createUser("7@gmail.com"));
@@ -58,14 +59,12 @@ public class UserRepositoryITFactory extends IntegrationTestBase {
                 user3.getId(), user4.getId(),
                 user5.getId()
         );
-
     }
 
+    @DisplayName("find by id should return not empty optional")
     @Test
     void findById_should_return_non_empty_optional() {
-
         var actualResult = userRepository.findById(2L);
-
         var expectedResult = Optional.of(
                 User.builder()
                         .id(2L)
@@ -88,43 +87,44 @@ public class UserRepositoryITFactory extends IntegrationTestBase {
         assertThat(actualResult.get().getEmail()).isEqualTo(expectedResult.get().getEmail());
         assertThat(actualResult.get().getPersonalAccount()).isEqualTo(expectedResult.get().getPersonalAccount());
         assertThat(actualResult.get().getAddress()).isEqualTo(expectedResult.get().getAddress());
-
     }
 
+    @DisplayName("find by id should return empty optional")
     @Test
     void findById_should_return_empty_optional() {
-
         var actualResult = userRepository.findById(25L);
         assertThat(actualResult).isEmpty();
-
-
     }
 
+    @DisplayName("find all")
     @Test
     void findAll() {
         var users = userRepository.findAll();
         assertThat(users).hasSize(6);
     }
 
+    @DisplayName("find by email should return not empty optional")
     @Test
     void findByEmail_should_return_non_empty_optional() {
         var maybeUser = userRepository.findByEmail("user3@gmail.com");
         assertThat(maybeUser).isNotEmpty();
     }
 
+    @DisplayName("find by email should return empty optional")
     @Test
     void findByEmail_should_return_empty_optional() {
         var maybeUser = userRepository.findByEmailAndPassword("user11@gmail.com", "pass");
         assertThat(maybeUser).isEmpty();
     }
 
+    @DisplayName("find by email and password should return not empty optional")
     @Test
     void findByEmailAndPassword_should_return_non_empty_optional() {
         var maybeUser = userRepository.findByEmailAndPassword("user5@gmail.com", "pass");
         assertThat(maybeUser).isNotEmpty();
     }
 
-
+    @DisplayName("find by email and password should return empty optional")
     @Test
     void findByEmailAndPassword_should_return_empty_optional() {
         var maybeUser = userRepository.findByEmailAndPassword("user11@gmail.com", "pass");
