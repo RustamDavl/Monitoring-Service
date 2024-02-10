@@ -30,7 +30,7 @@ public class CreateUpdateUserDtoValidator implements Validator<CreateUpdateUserD
         if (object.personalAccount().isBlank() || !object.personalAccount().matches("\\d{9}")) {
             validationResult.addError("personal account can not be empty and should contain 9 numbers");
         }
-        if (object.email().isBlank() || !object.email().matches("[a-zA-z]+@gmail.com")) {
+        if (object.email().isBlank() || !object.email().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             validationResult.addError("email can not be empty and should satisfy the pattern : %email%@gmail.com");
         }
         if (object.password().isBlank()) {

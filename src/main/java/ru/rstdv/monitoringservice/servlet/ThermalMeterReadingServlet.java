@@ -54,7 +54,7 @@ public class ThermalMeterReadingServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        CreateUpdateThermalMeterReadingDto createUpdateThermalMeterReadingDto = objectMapper.readValue(req.getInputStream(), CreateUpdateThermalMeterReadingDto.class);
+        CreateUpdateThermalMeterReadingDto createUpdateThermalMeterReadingDto = objectMapper.readValue(req.getReader(), CreateUpdateThermalMeterReadingDto.class);
         resp.setContentType("application/json");
         var validationResult = validator.createValidationResult(createUpdateThermalMeterReadingDto);
         if (validationResult.isValid()) {

@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.exception.EmailRegisteredException;
 import ru.rstdv.monitoringservice.factory.ServiceFactory;
@@ -22,6 +23,7 @@ import java.io.Writer;
 import static jakarta.servlet.http.HttpServletResponse.*;
 
 @WebServlet("/registration")
+@RequiredArgsConstructor
 public class UserRegistrationServlet extends HttpServlet {
     private final ObjectMapper objectMapper;
     private final ServiceFactory serviceFactory;
@@ -37,9 +39,9 @@ public class UserRegistrationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
-        CreateUpdateUserDto createUpdateUserDto = objectMapper.readValue(req.getInputStream(), CreateUpdateUserDto.class);
+        CreateUpdateUserDto createUpdateUserDto = objectMapper.readValue(req.getReader(), CreateUpdateUserDto.class);
         var validationResult = validator.createValidationResult(createUpdateUserDto);
         if (validationResult.isValid()) {
             tryRegister(createUpdateUserDto, resp);
@@ -85,8 +87,9 @@ public class UserRegistrationServlet extends HttpServlet {
             // TODO: 09.02.2024 logging
         } finally {
             try {
-                if (writer != null)
+                if (writer != null) {
                     writer.close();
+                }
             } catch (IOException e) {
                 // TODO: 10.02.2024
             }

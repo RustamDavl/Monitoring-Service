@@ -13,7 +13,7 @@ public class UserAuthDtoValidator implements Validator<UserAuthDto> {
     }
     @Override
     public ValidationResult createValidationResult(UserAuthDto object) {
-        if (object.email().isBlank() || !object.email().matches("[a-zA-z]+@gmail.com")) {
+        if (object.email().isBlank() || !object.email().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             validationResult.addError("email can not be empty and should satisfy the pattern : " + "%email%@gmail.com");
         }
         if (object.password().isBlank()) {

@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.createupdate.UserAuthDto;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
@@ -20,9 +21,11 @@ import java.io.IOException;
 import java.io.Writer;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
 
 @WebServlet("/authentication")
+@RequiredArgsConstructor
 public class UserAuthServlet extends HttpServlet {
 
     private final ObjectMapper objectMapper;
@@ -43,10 +46,10 @@ public class UserAuthServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
 
-        var userAuthDto = objectMapper.readValue(req.getInputStream(), UserAuthDto.class);
+        var userAuthDto = objectMapper.readValue(req.getReader(), UserAuthDto.class);
         var validationResult = validator.createValidationResult(userAuthDto);
 
         if (validationResult.isValid()) {
@@ -57,10 +60,12 @@ public class UserAuthServlet extends HttpServlet {
                     var authenticatedUser = tryAuthenticate(userAuthDto, resp);
                     if (authenticatedUser != null) {
                         session.setAttribute(USER_ATTRIBUTE, authenticatedUser);
+                        resp.setStatus(SC_OK);
                         writer.write(objectMapper.writeValueAsString(authenticatedUser));
                         writer.flush();
                     }
                 } else {
+                    resp.setStatus(SC_OK);
                     writer.write("already authenticated");
                     writer.flush();
                 }
@@ -93,7 +98,7 @@ public class UserAuthServlet extends HttpServlet {
             return userService.authenticate(userAuthDto.email(), userAuthDto.password());
         } catch (UserNotFoundException e) {
             try (var writer = resp.getWriter()) {
-                resp.setStatus(HttpServletResponse.SC_CONFLICT);
+                resp.setStatus(SC_BAD_REQUEST);
                 writer.write(e.getMessage());
                 writer.flush();
             } catch (IOException ex) {

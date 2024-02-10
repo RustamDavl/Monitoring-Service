@@ -56,7 +56,7 @@ public class WaterMeterReadingServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        CreateUpdateWaterMeterReadingDto createUpdateWaterMeterReadingDto = objectMapper.readValue(req.getInputStream(), CreateUpdateWaterMeterReadingDto.class);
+        CreateUpdateWaterMeterReadingDto createUpdateWaterMeterReadingDto = objectMapper.readValue(req.getReader(), CreateUpdateWaterMeterReadingDto.class);
         resp.setContentType("application/json");
         var validationResult = validator.createValidationResult(createUpdateWaterMeterReadingDto);
         if (validationResult.isValid()) {
