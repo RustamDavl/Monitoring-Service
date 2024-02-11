@@ -143,20 +143,17 @@
                     <verbose>true</verbose>
                     <Xlint>ignore</Xlint>
                     <encoding>UTF-8</encoding>
-                    <!-- IMPORTANT-->
                     <excludes>
                         <exclude>**/*.java</exclude>
                     </excludes>
                     <forceAjcCompile>true</forceAjcCompile>
                     <sources/>
-                    <!-- IMPORTANT-->
                 </configuration>
                 <executions>
                     <execution>
                         <id>default-compile</id>
                         <phase>process-classes</phase>
                         <goals>
-                            <!-- use this goal to weave all your main classes -->
                             <goal>compile</goal>
                         </goals>
                         <configuration>
@@ -165,19 +162,6 @@
                             </weaveDirectories>
                         </configuration>
                     </execution>
-<!--                    <execution>-->
-<!--                        <id>default-testCompile</id>-->
-<!--                        <phase>process-test-classes</phase>-->
-<!--                        <goals>-->
-<!--                            &lt;!&ndash; use this goal to weave all your test classes &ndash;&gt;-->
-<!--                            <goal>test-compile</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <weaveDirectories>-->
-<!--                                <weaveDirectory>${project.build.directory}/test-classes</weaveDirectory>-->
-<!--                            </weaveDirectories>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
                 </executions>
             </plugin>
             <plugin>
@@ -195,15 +179,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-<!--                &lt;!&ndash;                /////////////////////////////////////////////////////////////////////&ndash;&gt;-->
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.aspectj</groupId>-->
-<!--                        <artifactId>aspectjweaver</artifactId>-->
-<!--                        <version>${org.aspectj.version}</version>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
-<!--                &lt;!&ndash;                /////////////////////////////////////////////////////////////////////&ndash;&gt;-->
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
