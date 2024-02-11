@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
@@ -29,6 +30,7 @@ import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 
 // can obtain two parameters : userId and monthValue
 @WebServlet("/water-meter-readings")
+@RequiredArgsConstructor
 public class WaterMeterReadingServlet extends HttpServlet {
 
     private final ObjectMapper objectMapper;
@@ -47,7 +49,7 @@ public class WaterMeterReadingServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         var userId = req.getParameter("userId");
         var monthValue = req.getParameter("monthValue");
         resp.setContentType("application/json");
@@ -55,7 +57,7 @@ public class WaterMeterReadingServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         CreateUpdateWaterMeterReadingDto createUpdateWaterMeterReadingDto = objectMapper.readValue(req.getReader(), CreateUpdateWaterMeterReadingDto.class);
         resp.setContentType("application/json");
         var validationResult = validator.createValidationResult(createUpdateWaterMeterReadingDto);

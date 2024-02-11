@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
@@ -26,6 +27,7 @@ import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 
 @WebServlet("/thermal-meter-readings")
+@RequiredArgsConstructor
 public class ThermalMeterReadingServlet extends HttpServlet {
 
     private final ObjectMapper objectMapper;
@@ -45,7 +47,7 @@ public class ThermalMeterReadingServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         var userId = req.getParameter("userId");
         var monthValue = req.getParameter("monthValue");
         resp.setContentType("application/json");
@@ -53,7 +55,7 @@ public class ThermalMeterReadingServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         CreateUpdateThermalMeterReadingDto createUpdateThermalMeterReadingDto = objectMapper.readValue(req.getReader(), CreateUpdateThermalMeterReadingDto.class);
         resp.setContentType("application/json");
         var validationResult = validator.createValidationResult(createUpdateThermalMeterReadingDto);
