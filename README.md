@@ -43,7 +43,7 @@ mvn liquibase:update
 Упаковываем проект в .war файл
 
  ```bash
-mvn pakcage
+mvn package
 ```
 
 | Method   | URI                                                                   | Description                                            |
