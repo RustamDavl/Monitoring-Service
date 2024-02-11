@@ -17,6 +17,7 @@ import java.io.Writer;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
+
 /**
  * сервлет ответственнен за отображение пользователя по идентификатору
  * GET : /monitoring-service/users/{id}; id - идентификатор пользователя
@@ -40,7 +41,7 @@ public class FindUsersServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-        var userId = req.getRequestURI().replaceAll("/monitoring-service/users/", "");
+        var userId = req.getRequestURI().replaceAll("\\D+", "");
         resp.setContentType("application/json");
         if (!userId.isEmpty()) {
             tryFindUserById(Long.valueOf(userId), resp);

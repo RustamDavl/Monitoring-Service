@@ -16,6 +16,7 @@ import static ru.rstdv.monitoringservice.util.UrlPath.*;
 public class AuthorizationFilter implements Filter {
 
     private static final Set<String> PUBLIC_PATH = Set.of(AUTHENTICATION, REGISTRATION, LOGOUT);
+    private static final Set<String> PUBLIC_PATH_IF_AUTHENTICATED = Set.of(SEND_WATER_METER_READING, SEND_THERMAL_METER_READING);
     private static final String USER_ATTRIBUTE = "user";
 
     @Override
@@ -28,6 +29,8 @@ public class AuthorizationFilter implements Filter {
             if (!isUserAuthenticated(request)) {
                 ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().write("go to registration or authentication");
+            } else if (isUserAuthenticated(request) && isPublicPathForAuthenticatedUser(uri)) {
+                chain.doFilter(request, response);
             } else if (isUserAuthenticated(request) && hasPermissions(request)) {
                 chain.doFilter(request, response);
             } else {
@@ -61,6 +64,11 @@ public class AuthorizationFilter implements Filter {
 
     private boolean isPublicPath(String uri) {
         return PUBLIC_PATH.stream()
+                .anyMatch(uri::startsWith);
+    }
+
+    private boolean isPublicPathForAuthenticatedUser(String uri) {
+        return PUBLIC_PATH_IF_AUTHENTICATED.stream()
                 .anyMatch(uri::startsWith);
     }
 }
