@@ -75,7 +75,7 @@ Examples of request (2)
 
 ```
 {
-	"userId": "1",
+	"userId": "2",
     "gigaCalories" : "1000"
 }
 ```
@@ -85,7 +85,7 @@ Examples of request (3)
 ```
 {
 	"firstname": "firstname",
-    "email" : "someUniq@gmail.com",
+    "email" : "someUnique@gmail.com",
     "password" : "pass",
     "personalAccount" : "111111111",
     "city" : "City",
@@ -98,7 +98,7 @@ Examples of request (4)
 
 ```
 {
-    "email" : "user2@gmail.com",
+    "email" : "uniqueEmail@gmail.com",
     "password" : "pass"
 }
 ```
