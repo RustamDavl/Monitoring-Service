@@ -2,6 +2,7 @@ package ru.rstdv.monitoringservice.service;
 
 import lombok.RequiredArgsConstructor;
 import ru.rstdv.monitoringservice.aspect.annotation.Auditable;
+import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
+@Loggable
 @RequiredArgsConstructor
 public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWaterMeterReadingDto, CreateUpdateWaterMeterReadingDto> {
 
