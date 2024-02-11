@@ -16,7 +16,7 @@
     </changeSet>
 
     <changeSet id="2" author="rustd">
-        <createTable  tableName="audit">
+        <createTable tableName="audit">
             <column name="id" type="BIGINT" defaultValueComputed="nextval('audit_id_seq')">
                 <constraints primaryKey="true"/>
             </column>

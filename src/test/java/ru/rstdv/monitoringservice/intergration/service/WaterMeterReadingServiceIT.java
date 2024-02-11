@@ -7,12 +7,16 @@ import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
+import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFoundException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.factory.RepositoryFactory;
 import ru.rstdv.monitoringservice.factory.RepositoryFactoryImpl;
 import ru.rstdv.monitoringservice.factory.ServiceFactory;
 import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
+import ru.rstdv.monitoringservice.mapper.AuditMapper;
+import ru.rstdv.monitoringservice.mapper.UserMapper;
+import ru.rstdv.monitoringservice.mapper.WaterMeterMapper;
 import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.service.*;
@@ -24,9 +28,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WaterMeterReadingServiceIT extends IntegrationTestBase {
 
     private UserRepository userRepository;
+    private AuditService auditService;
+    private WaterMeterMapper waterMeterMapper;
+
+    private UserMapper userMapper;
+    private MeterReadingRepository<WaterMeterReading> waterMeterReadingRepository;
     private MeterReadingService<ReadWaterMeterReadingDto, CreateUpdateWaterMeterReadingDto> waterMeterReadingService;
-    private ServiceFactory serviceFactory;
-    private RepositoryFactory repositoryFactory;
+
 
     @BeforeEach
     void setUp() {
@@ -36,10 +44,12 @@ public class WaterMeterReadingServiceIT extends IntegrationTestBase {
                 container.getPassword()
         );
         LiquibaseUtil.start(connectionProvider);
-        serviceFactory = new ServiceFactoryImpl();
-        repositoryFactory = new RepositoryFactoryImpl();
-        userRepository = repositoryFactory.createUserRepository();
-        waterMeterReadingService = serviceFactory.createWaterMeterReadingService();
+        userRepository = new UserRepositoryImpl(connectionProvider);
+        waterMeterReadingRepository = new WaterMeterReadingRepositoryImpl(connectionProvider);
+        waterMeterMapper = WaterMeterMapper.INSTANCE;
+        userMapper = UserMapper.INSTANCE;
+        auditService = new AuditServiceImpl(new AuditRepositoryImpl(connectionProvider), AuditMapper.INSTANCE);
+        waterMeterReadingService = new WaterMeterReadingServiceImpl(waterMeterReadingRepository, userRepository, waterMeterMapper, auditService);
     }
 
     @AfterEach

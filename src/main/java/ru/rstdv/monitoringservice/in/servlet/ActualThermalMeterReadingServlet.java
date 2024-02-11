@@ -1,4 +1,4 @@
-package ru.rstdv.monitoringservice.servlet;
+package ru.rstdv.monitoringservice.in.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
@@ -23,6 +24,7 @@ import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 import static jakarta.servlet.http.HttpServletResponse.SC_CREATED;
 
 //with params : userId
+@Loggable
 @WebServlet("/actual-thermal-meter-reading")
 public class ActualThermalMeterReadingServlet extends HttpServlet {
     private final ObjectMapper objectMapper;

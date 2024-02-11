@@ -1,6 +1,9 @@
 package ru.rstdv.monitoringservice.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import ru.rstdv.monitoringservice.aspect.annotation.Auditable;
+import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
@@ -13,7 +16,7 @@ import ru.rstdv.monitoringservice.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+@Loggable
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -21,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final AuditService auditService;
 
+    @Auditable
     public ReadUserDto register(CreateUpdateUserDto createUpdateUserDto) {
         var maybeUser = userRepository.findByEmail(createUpdateUserDto.email());
         if (maybeUser.isPresent())
@@ -28,28 +32,15 @@ public class UserServiceImpl implements UserService {
 
         var savedUser = userRepository.save(userMapper.toUser(createUpdateUserDto));
 
-        auditService.saveAudit(new CreateAuditDto(
-                savedUser.getId().toString(),
-                AuditAction.REGISTRATION.name(),
-                LocalDateTime.now(),
-                "user registered successfully"
-        ));
         return userMapper.toReadUserDto(savedUser);
-
     }
 
+    @Auditable
     public ReadUserDto authenticate(String email, String password) {
         var maybeUser = userRepository.findByEmailAndPassword(email, password)
                 .orElseThrow(
                         () -> new UserNotFoundException("bad credentials")
                 );
-
-        auditService.saveAudit(new CreateAuditDto(
-                maybeUser.getId().toString(),
-                AuditAction.AUTHENTICATION.name(),
-                LocalDateTime.now(),
-                "user authenticated successfully"
-        ));
         return userMapper.toReadUserDto(maybeUser);
     }
 

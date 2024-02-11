@@ -11,6 +11,9 @@
     <url>http://maven.apache.org</url>
 
     <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.junit.jupiter.version>5.9.1</org.junit.jupiter.version>
         <org.projectlombok.version>1.18.30</org.projectlombok.version>
@@ -19,13 +22,12 @@
         <org.posgresql.version>42.6.0</org.posgresql.version>
         <org.liquibase.version>4.24.0</org.liquibase.version>
         <org.testcontainers.version>1.19.4</org.testcontainers.version>
-        <maven.compiler.source>17</maven.compiler.source>
         <mockito-core.version>5.3.1</mockito-core.version>
         <mockito-junit-jupiter.version>5.10.0</mockito-junit-jupiter.version>
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
         <com.fasterxml.jackson.core.version>2.15.3</com.fasterxml.jackson.core.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
-        <maven.compiler.target>17</maven.compiler.target>
+        <org.aspectj.version>1.9.20.1</org.aspectj.version>
     </properties>
 
     <dependencies>
@@ -117,24 +119,71 @@
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${org.aspectj.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <finalName>monitoring-service</finalName>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>1.14.0</version>
+                <configuration>
+                    <complianceLevel>16.0</complianceLevel>
+                    <source>16</source>
+                    <target>16</target>
+                    <showWeaveInfo>true</showWeaveInfo>
+                    <verbose>true</verbose>
+                    <Xlint>ignore</Xlint>
+                    <encoding>UTF-8</encoding>
+                    <!-- IMPORTANT-->
+                    <excludes>
+                        <exclude>**/*.java</exclude>
+                    </excludes>
+                    <forceAjcCompile>true</forceAjcCompile>
+                    <sources/>
+                    <!-- IMPORTANT-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <!-- use this goal to weave all your main classes -->
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <weaveDirectories>
+                                <weaveDirectory>${project.build.directory}/classes</weaveDirectory>
+                            </weaveDirectories>
+                        </configuration>
+                    </execution>
+<!--                    <execution>-->
+<!--                        <id>default-testCompile</id>-->
+<!--                        <phase>process-test-classes</phase>-->
+<!--                        <goals>-->
+<!--                            &lt;!&ndash; use this goal to weave all your test classes &ndash;&gt;-->
+<!--                            <goal>test-compile</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <weaveDirectories>-->
+<!--                                <weaveDirectory>${project.build.directory}/test-classes</weaveDirectory>-->
+<!--                            </weaveDirectories>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${org.projectlombok.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.liquibase</groupId>
@@ -143,10 +192,18 @@
                     <propertyFile>src\main\resources\liquibase.properties</propertyFile>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+<!--                &lt;!&ndash;                /////////////////////////////////////////////////////////////////////&ndash;&gt;-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.aspectj</groupId>-->
+<!--                        <artifactId>aspectjweaver</artifactId>-->
+<!--                        <version>${org.aspectj.version}</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+<!--                &lt;!&ndash;                /////////////////////////////////////////////////////////////////////&ndash;&gt;-->
                 <configuration>
                     <annotationProcessorPaths>
                         <path>

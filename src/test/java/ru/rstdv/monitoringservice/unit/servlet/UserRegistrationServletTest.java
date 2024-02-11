@@ -17,7 +17,7 @@ import ru.rstdv.monitoringservice.entity.embeddable.Address;
 import ru.rstdv.monitoringservice.exception.EmailRegisteredException;
 import ru.rstdv.monitoringservice.factory.ServiceFactory;
 import ru.rstdv.monitoringservice.service.UserService;
-import ru.rstdv.monitoringservice.servlet.UserRegistrationServlet;
+import ru.rstdv.monitoringservice.in.servlet.UserRegistrationServlet;
 import ru.rstdv.monitoringservice.validator.CreateUpdateUserDtoValidator;
 import ru.rstdv.monitoringservice.validator.ValidationResult;
 

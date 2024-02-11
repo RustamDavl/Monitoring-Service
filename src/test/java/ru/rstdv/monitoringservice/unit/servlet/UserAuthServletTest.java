@@ -18,7 +18,7 @@ import ru.rstdv.monitoringservice.entity.embeddable.Address;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.factory.ServiceFactory;
 import ru.rstdv.monitoringservice.service.UserService;
-import ru.rstdv.monitoringservice.servlet.UserAuthServlet;
+import ru.rstdv.monitoringservice.in.servlet.UserAuthServlet;
 import ru.rstdv.monitoringservice.validator.UserAuthDtoValidator;
 import ru.rstdv.monitoringservice.validator.ValidationResult;
 

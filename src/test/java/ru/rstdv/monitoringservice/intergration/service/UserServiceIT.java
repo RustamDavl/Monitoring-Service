@@ -10,6 +10,14 @@ import ru.rstdv.monitoringservice.exception.EmailRegisteredException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.factory.ServiceFactory;
 import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
+import ru.rstdv.monitoringservice.mapper.AuditMapper;
+import ru.rstdv.monitoringservice.mapper.AuditMapperImpl;
+import ru.rstdv.monitoringservice.mapper.UserMapper;
+import ru.rstdv.monitoringservice.repository.AuditRepositoryImpl;
+import ru.rstdv.monitoringservice.repository.UserRepository;
+import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
+import ru.rstdv.monitoringservice.service.AuditServiceImpl;
+import ru.rstdv.monitoringservice.service.UserServiceImpl;
 import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.service.AuditService;
 import ru.rstdv.monitoringservice.service.UserService;
@@ -22,8 +30,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class UserServiceIT extends IntegrationTestBase {
 
     private UserService userService;
+    private UserRepository userRepository;
     private AuditService auditService;
-    private ServiceFactory serviceFactory;
+    private UserMapper userMapper;
 
     @BeforeEach
     void setUp() {
@@ -33,10 +42,10 @@ public class UserServiceIT extends IntegrationTestBase {
                 container.getPassword()
         );
         LiquibaseUtil.start(connectionProvider);
-        serviceFactory = new ServiceFactoryImpl();
-        auditService = serviceFactory.createAuditService();
-        userService = serviceFactory.createUserService();
-        auditService = serviceFactory.createAuditService();
+        userRepository = new UserRepositoryImpl(connectionProvider);
+        userMapper = UserMapper.INSTANCE;
+        auditService = new AuditServiceImpl(new AuditRepositoryImpl(connectionProvider), AuditMapper.INSTANCE);
+        userService = new UserServiceImpl(userRepository, userMapper, auditService);
     }
 
     @AfterEach

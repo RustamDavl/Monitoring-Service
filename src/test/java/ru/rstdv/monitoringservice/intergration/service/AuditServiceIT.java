@@ -11,6 +11,12 @@ import ru.rstdv.monitoringservice.factory.RepositoryFactory;
 import ru.rstdv.monitoringservice.factory.RepositoryFactoryImpl;
 import ru.rstdv.monitoringservice.factory.ServiceFactory;
 import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
+import ru.rstdv.monitoringservice.mapper.AuditMapper;
+import ru.rstdv.monitoringservice.mapper.UserMapper;
+import ru.rstdv.monitoringservice.repository.AuditRepositoryImpl;
+import ru.rstdv.monitoringservice.repository.UserRepository;
+import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
+import ru.rstdv.monitoringservice.service.AuditServiceImpl;
 import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.repository.AuditRepository;
 import ru.rstdv.monitoringservice.service.AuditService;
@@ -26,9 +32,9 @@ public class AuditServiceIT extends IntegrationTestBase {
 
     private AuditService auditService;
     private AuditRepository auditRepository;
-    private ServiceFactory serviceFactory;
+    private AuditMapper auditMapper;
 
-    private RepositoryFactory repositoryFactory;
+    private UserRepository userRepository;
 
 
     @BeforeEach
@@ -39,10 +45,12 @@ public class AuditServiceIT extends IntegrationTestBase {
                 container.getPassword()
         );
         LiquibaseUtil.start(connectionProvider);
-        serviceFactory = new ServiceFactoryImpl();
-        repositoryFactory = new RepositoryFactoryImpl();
-        auditRepository = repositoryFactory.createAuditRepository();
-        auditService = serviceFactory.createAuditService();
+        auditRepository = new AuditRepositoryImpl(connectionProvider);
+        userRepository = new UserRepositoryImpl(connectionProvider);
+        auditMapper = AuditMapper.INSTANCE;
+        auditService = new AuditServiceImpl(auditRepository, auditMapper);
+        userRepository = new UserRepositoryImpl(connectionProvider);
+        auditService = new AuditServiceImpl(auditRepository, auditMapper);
     }
 
     @AfterEach

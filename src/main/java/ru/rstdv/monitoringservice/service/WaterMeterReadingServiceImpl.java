@@ -1,6 +1,7 @@
 package ru.rstdv.monitoringservice.service;
 
 import lombok.RequiredArgsConstructor;
+import ru.rstdv.monitoringservice.aspect.annotation.Auditable;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
@@ -27,6 +28,7 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
     private final AuditService auditService;
 
 
+    @Auditable
     @Override
     public ReadWaterMeterReadingDto save(CreateUpdateWaterMeterReadingDto object) {
         var userId = object.userId();
@@ -38,31 +40,21 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
         );
         var savedWaterMeterReading = waterMeterReadingRepository.save(waterMeterReadingToSave);
 
-        auditService.saveAudit(new CreateAuditDto(
-                object.userId(),
-                AuditAction.WATER_METER_READING_SENDING.name(),
-                LocalDateTime.now(),
-                "water meter readings was saved"
-        ));
         return waterMeterMapper.toReadWaterMeterReadingDto(savedWaterMeterReading);
     }
 
+    @Auditable
     @Override
     public ReadWaterMeterReadingDto findActualByUserId(Long id) {
         var maybeWaterMeter = waterMeterReadingRepository.findActualByUserId(id)
                 .orElseThrow(() -> new UserNotFoundException("there is no user with id " + id));
 
-        auditService.saveAudit(new CreateAuditDto(
-                id.toString(),
-                AuditAction.GET_ACTUAL_WATER_METER_READING.name(),
-                LocalDateTime.now(),
-                "get actual result"
-        ));
         return waterMeterMapper.toReadWaterMeterReadingDto(
                 maybeWaterMeter
         );
     }
 
+    @Auditable
     @Override
     public List<ReadWaterMeterReadingDto> findAllByUserId(Long id) {
         var list = waterMeterReadingRepository.findAllByUserId(id)
@@ -70,15 +62,10 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
                 .map(waterMeterMapper::toReadWaterMeterReadingDto)
                 .toList();
 
-        auditService.saveAudit(new CreateAuditDto(
-                id.toString(),
-                AuditAction.GET_WATER_READING_HISTORY.name(),
-                LocalDateTime.now(),
-                "get all water meter readings of user " + id
-        ));
         return list;
     }
 
+    @Auditable
     @Override
     public ReadWaterMeterReadingDto findByMonthAndUserId(MonthFilter monthFilter, Long id) {
         if (!isMonthValueCorrect(monthFilter.getMonthNumber()))
@@ -87,17 +74,9 @@ public class WaterMeterReadingServiceImpl implements MeterReadingService<ReadWat
         var list = waterMeterReadingRepository.findByMonthAndUserId(monthFilter, id)
                 .map(waterMeterMapper::toReadWaterMeterReadingDto)
                 .orElseThrow(() -> new MeterReadingNotFoundException("there is no any meter reading in " + Month.of(monthFilter.getMonthNumber()).name()));
-
-        auditService.saveAudit(
-                new CreateAuditDto(
-                        id.toString(),
-                        AuditAction.GET_WATER_READING_BY_MONTH.name(),
-                        LocalDateTime.now(),
-                        "user got water meter reading by month : " + Month.of(monthFilter.getMonthNumber())
-                )
-        );
         return list;
     }
+
 
     @Override
     public List<ReadWaterMeterReadingDto> findAll() {

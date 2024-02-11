@@ -1,6 +1,7 @@
 package ru.rstdv.monitoringservice.repository;
 
 import lombok.RequiredArgsConstructor;
+import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
 import ru.rstdv.monitoringservice.util.ConnectionProvider;

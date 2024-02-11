@@ -7,12 +7,16 @@ import org.junit.jupiter.api.Test;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
+import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFoundException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.factory.RepositoryFactory;
 import ru.rstdv.monitoringservice.factory.RepositoryFactoryImpl;
 import ru.rstdv.monitoringservice.factory.ServiceFactory;
 import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
+import ru.rstdv.monitoringservice.mapper.AuditMapper;
+import ru.rstdv.monitoringservice.mapper.ThermalMeterMapper;
+import ru.rstdv.monitoringservice.mapper.UserMapper;
 import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.service.*;
@@ -24,10 +28,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ThermalMeterReadingServiceIT extends IntegrationTestBase {
 
     private UserRepository userRepository;
-    private MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> thermalMeterReadingService;
+    private AuditService auditService;
+    private ThermalMeterMapper thermalMeterMapper;
 
-    private ServiceFactory serviceFactory;
-    private RepositoryFactory repositoryFactory;
+    private UserMapper userMapper;
+    private MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository;
+    private MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> thermalMeterReadingService;
 
     @BeforeEach
     void setUp() {
@@ -37,10 +43,12 @@ public class ThermalMeterReadingServiceIT extends IntegrationTestBase {
                 container.getPassword()
         );
         LiquibaseUtil.start(connectionProvider);
-        serviceFactory = new ServiceFactoryImpl();
-        repositoryFactory = new RepositoryFactoryImpl();
-        userRepository = repositoryFactory.createUserRepository();
-        thermalMeterReadingService = serviceFactory.createThermalMeterReadingService();
+        userRepository = new UserRepositoryImpl(connectionProvider);
+        thermalMeterReadingRepository = new ThermalMeterReadingRepositoryImpl(connectionProvider);
+        thermalMeterMapper = ThermalMeterMapper.INSTANCE;
+        userMapper = UserMapper.INSTANCE;
+        auditService = new AuditServiceImpl(new AuditRepositoryImpl(connectionProvider), AuditMapper.INSTANCE);
+        thermalMeterReadingService = new ThermalMeterReadingServiceImpl(thermalMeterReadingRepository, userRepository, thermalMeterMapper, auditService);
     }
 
     @AfterEach

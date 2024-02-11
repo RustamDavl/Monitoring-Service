@@ -1,13 +1,14 @@
-package ru.rstdv.monitoringservice.servlet;
+package ru.rstdv.monitoringservice.in.servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
 
 import java.io.IOException;
-
+@Loggable
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
 
