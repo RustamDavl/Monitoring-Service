@@ -1,32 +1,5 @@
-# Monitoring-Service
-Monitoring-Service - это сервис, для отправки показаний счетчиков воды и тепла.
-
-## Функциональность
-Пользователь : 
-
-  - Регистарция пользователей.
-  - Аунтификация пользователей.
-  - Получения актуальных показаний счетчиков.
-  - Подачи показаний счетчиков.
-  - Просмотр показаний счетчика за конкретный месяц.
-  - Просмотра истории подачи показаний.
-    
-Администратор :
-
-  - Просмотр всех пользователей системы
-  - Просмотр аудита пользователя
-
-## Использование
- ```bash
-gin clone https://github.com/RustamDavl/Monitoring-Service.git
-```
-
-## Технологии
-* Java core(collection api)
-* JUnit 5 (assertJ)
-
-## Тестирование
-Проект покрыт юнит-тестами JUnit 5 для их запуска необходимо запустить команду \br
- ```bash
-mvn test
-```
+# Monitoring-Service.
+# Основной README файл.
+1. [ДЗ №1](https://github.com/RustamDavl/Monitoring-Service)
+2. [ДЗ №2](https://github.com/RustamDavl/Monitoring-Service/pull/2) `Ссылка указана на Pull Request`
+3. [ДЗ №3](https://github.com/YlabCourse/homework_example/pull/1/files) `Ссылка указана на Pull Request`
