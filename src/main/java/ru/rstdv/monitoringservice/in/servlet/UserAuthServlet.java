@@ -24,6 +24,10 @@ import java.io.Writer;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 
+/**
+ * сервлет ответственнен за аутентификацию пользователя
+ * POST : /monitoring-service/authentication
+ */
 @Loggable
 @WebServlet("/authentication")
 @RequiredArgsConstructor

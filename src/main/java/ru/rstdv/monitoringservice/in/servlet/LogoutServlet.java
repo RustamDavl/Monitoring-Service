@@ -8,6 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
 
 import java.io.IOException;
+/**
+ * сервлет ответственнен разлогирование пользователя
+ * POST : /monitoring-service/logout
+ */
 @Loggable
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {

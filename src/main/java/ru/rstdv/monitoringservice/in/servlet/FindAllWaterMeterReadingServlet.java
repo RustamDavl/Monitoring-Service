@@ -1,6 +1,6 @@
 package ru.rstdv.monitoringservice.in.servlet;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.ServletException;
@@ -21,6 +21,10 @@ import java.io.Writer;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 
+/**
+ * сервлет ответственнен за отображение всех показаний счетчика воды пользователя
+ * GET : /monitoring-service/water-meter-readings/all?userId=id
+ */
 @Loggable
 @WebServlet("/water-meter-readings/all")
 public class FindAllWaterMeterReadingServlet extends HttpServlet {

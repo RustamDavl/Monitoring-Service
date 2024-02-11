@@ -1,6 +1,5 @@
 package ru.rstdv;
 
-import ru.rstdv.monitoringservice.in.ConsoleApplication;
 import ru.rstdv.monitoringservice.util.CommonConnectionProvider;
 import ru.rstdv.monitoringservice.util.LiquibaseUtil;
 
@@ -11,7 +10,5 @@ public class ApplicationRunner {
     public static void main(String[] args) {
 
         LiquibaseUtil.start(new CommonConnectionProvider());
-        ConsoleApplication consoleApplication = new ConsoleApplication();
-        consoleApplication.start();
     }
 }

@@ -23,7 +23,10 @@ import java.io.Writer;
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 import static jakarta.servlet.http.HttpServletResponse.SC_CREATED;
 
-//with params : userId
+/**
+ * сервлет ответственнен за отображение последнего показания счетчика тепла пользователя
+ * GET : /monitoring-service/actual-water-meter-readings/all?userId=id
+ */
 @Loggable
 @WebServlet("/actual-thermal-meter-reading")
 public class ActualThermalMeterReadingServlet extends HttpServlet {

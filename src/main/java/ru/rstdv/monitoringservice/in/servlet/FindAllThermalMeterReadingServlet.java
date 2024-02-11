@@ -1,18 +1,14 @@
 package ru.rstdv.monitoringservice.in.servlet;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadingDto;
-import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
-import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.factory.ServiceFactory;
 import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
@@ -23,6 +19,10 @@ import java.io.Writer;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 
+/**
+ * сервлет ответственнен за отображение всех показаний счетчика тепла пользователя
+ * GET : /monitoring-service/water-meter-readings/all?userId=id
+ */
 @Loggable
 @WebServlet("/thermal-meter-readings/all")
 public class FindAllThermalMeterReadingServlet extends HttpServlet {

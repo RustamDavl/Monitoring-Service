@@ -22,6 +22,11 @@ import java.io.IOException;
 import java.io.Writer;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
+
+/**
+ * сервлет ответственнен за регистрацию пользователей
+ * POST : /monitoring-service/registration
+ */
 @Loggable
 @WebServlet("/registration")
 @RequiredArgsConstructor

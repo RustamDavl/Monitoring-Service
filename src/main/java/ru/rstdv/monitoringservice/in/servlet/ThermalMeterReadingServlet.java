@@ -26,6 +26,11 @@ import java.io.Writer;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
+/**
+ * сервлет ответственнен за подачу показаний счетчика тепла и за отображение показаний пользователя за конкретный месяц
+ * POST : /monitoring-service/thermal-meter-readings
+ * GET : /monitoring-service/thermal-meter-readings?userId=id&monthValue=value
+ */
 @Loggable
 @WebServlet("/thermal-meter-readings")
 @RequiredArgsConstructor

@@ -29,8 +29,12 @@ import java.io.Writer;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 
+/**
+ * сервлет ответственнен за подачу показаний счетчика воды и за отображение показаний пользователя за конкретный месяц
+ * POST : /monitoring-service/water-meter-readings
+ * GET : /monitoring-service/water-meter-readings?userId=id&monthValue=value
+ */
 @Loggable
-// can obtain two parameters : userId and monthValue
 @WebServlet("/water-meter-readings")
 @RequiredArgsConstructor
 public class WaterMeterReadingServlet extends HttpServlet {

@@ -19,8 +19,12 @@ import java.io.IOException;
 import java.io.Writer;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
+
+/**
+ * сервлет ответственнен за отображение последнего показания счетчика воды пользователя
+ * GET : /monitoring-service/actual-water-meter-readings/all?userId=id
+ */
 @Loggable
-//with params : userId
 @WebServlet("/actual-water-meter-reading")
 public class ActualWaterMeterReadingServlet extends HttpServlet {
     private final ObjectMapper objectMapper;

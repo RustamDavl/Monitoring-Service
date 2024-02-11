@@ -17,6 +17,10 @@ import java.io.Writer;
 
 import static jakarta.servlet.http.HttpServletResponse.SC_CONFLICT;
 import static jakarta.servlet.http.HttpServletResponse.SC_OK;
+/**
+ * сервлет ответственнен за отображение пользователя по идентификатору
+ * GET : /monitoring-service/users/{id}; id - идентификатор пользователя
+ */
 @Loggable
 @WebServlet("/users/*")
 public class FindUsersServlet extends HttpServlet {
