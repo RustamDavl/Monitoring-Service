@@ -8,7 +8,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
 import ru.rstdv.monitoringservice.entity.embeddable.Address;
-import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.exception.handler.ServiceExceptionHandler;
 import ru.rstdv.monitoringservice.in.controller.UserController;
 import ru.rstdv.monitoringservice.service.UserService;
