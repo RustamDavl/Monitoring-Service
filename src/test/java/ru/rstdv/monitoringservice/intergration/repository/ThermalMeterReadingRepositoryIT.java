@@ -1,46 +1,52 @@
 package ru.rstdv.monitoringservice.intergration.repository;
 
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestConstructor;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
+import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.util.IntegrationTestBase;
-import ru.rstdv.monitoringservice.repository.MeterReadingRepository;
-import ru.rstdv.monitoringservice.repository.ThermalMeterReadingRepositoryImpl;
-import ru.rstdv.monitoringservice.repository.UserRepository;
-import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
 import ru.rstdv.monitoringservice.util.LiquibaseUtil;
-import ru.rstdv.monitoringservice.util.TestConnectionProvider;
+
 
 import java.time.Year;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RequiredArgsConstructor
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@ContextConfiguration(classes = {
+        ThermalMeterReadingRepositoryImpl.class,
+        UserRepositoryImpl.class
+})
 public class ThermalMeterReadingRepositoryIT extends IntegrationTestBase {
-    private MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository;
-    private UserRepository userRepository;
+    private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository;
+    private final UserRepository userRepository;
 
-    @BeforeEach
-    void setUp() {
-         connectionProvider = new TestConnectionProvider(
-                container.getJdbcUrl(),
-                container.getUsername(),
-                container.getPassword()
-        );
-        LiquibaseUtil.start(connectionProvider);
-        thermalMeterReadingRepository = new ThermalMeterReadingRepositoryImpl(connectionProvider);
-        userRepository = new UserRepositoryImpl(connectionProvider);
-    }
+//    @BeforeEach
+//    void setUp() {
+//         connectionProvider = new TestConnectionProvider(
+//                container.getJdbcUrl(),
+//                container.getUsername(),
+//                container.getPassword()
+//        );
+//        LiquibaseUtil.start(connectionProvider);
+//        thermalMeterReadingRepository = new ThermalMeterReadingRepositoryImpl(connectionProvider);
+//        userRepository = new UserRepositoryImpl(connectionProvider);
+//    }
 
-    @AfterEach
-    void clear() {
-       LiquibaseUtil.dropAll();
-    }
+//    @AfterEach
+//    void clear() {
+//       LiquibaseUtil.dropAll();
+//    }
 
     @DisplayName("save")
     @Test

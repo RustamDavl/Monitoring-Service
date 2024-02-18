@@ -1,20 +1,21 @@
 package ru.rstdv.monitoringservice.repository;
 
 import lombok.RequiredArgsConstructor;
-import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
+import org.springframework.stereotype.Component;
 import ru.rstdv.monitoringservice.entity.Audit;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
-import ru.rstdv.monitoringservice.util.ConnectionProvider;
 
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 @RequiredArgsConstructor
 public class AuditRepositoryImpl implements AuditRepository {
 
-    private final ConnectionProvider connectionProvider;
+    private final DataSource dataSource;
     private static final String FIND_AUDIT_BY_USER_ID_SQL = """
             SELECT id, user_id, audit_action, description, audit_date_time
             FROM audit
@@ -28,7 +29,7 @@ public class AuditRepositoryImpl implements AuditRepository {
 
     @Override
     public List<Audit> findByUserId(Long userId) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_AUDIT_BY_USER_ID_SQL)) {
             preparedStatement.setLong(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -52,7 +53,7 @@ public class AuditRepositoryImpl implements AuditRepository {
 
     @Override
     public void save(Audit audit) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL)) {
             preparedStatement.setLong(1, audit.getUserId());
             preparedStatement.setString(2, audit.getAuditAction().name());

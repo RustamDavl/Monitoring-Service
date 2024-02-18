@@ -1,6 +1,7 @@
 package ru.rstdv.monitoringservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.read.ReadAuditDto;
 import ru.rstdv.monitoringservice.mapper.AuditMapper;
@@ -9,6 +10,7 @@ import ru.rstdv.monitoringservice.repository.AuditRepository;
 import java.util.List;
 
 @RequiredArgsConstructor
+@Service
 public class AuditServiceImpl implements AuditService {
 
     private final AuditRepository auditRepository;

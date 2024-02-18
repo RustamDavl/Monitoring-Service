@@ -13,7 +13,7 @@ import java.sql.Connection;
 @UtilityClass
 public class LiquibaseUtil {
     private Liquibase liquibase;
-    public void start(ConnectionProvider connectionProvider) {
+    public void start(DataSource connectionProvider) {
         try {
             Connection connection = connectionProvider.getConnection();
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));

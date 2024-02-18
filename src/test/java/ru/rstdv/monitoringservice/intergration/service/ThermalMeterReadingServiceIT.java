@@ -1,60 +1,69 @@
 package ru.rstdv.monitoringservice.intergration.service;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestConstructor;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilterImpl;
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.exception.MeterReadingNotFoundException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
-import ru.rstdv.monitoringservice.factory.RepositoryFactory;
-import ru.rstdv.monitoringservice.factory.RepositoryFactoryImpl;
-import ru.rstdv.monitoringservice.factory.ServiceFactory;
-import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
-import ru.rstdv.monitoringservice.mapper.AuditMapper;
-import ru.rstdv.monitoringservice.mapper.ThermalMeterMapper;
-import ru.rstdv.monitoringservice.mapper.UserMapper;
+import ru.rstdv.monitoringservice.mapper.*;
 import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.repository.*;
 import ru.rstdv.monitoringservice.service.*;
 import ru.rstdv.monitoringservice.util.LiquibaseUtil;
-import ru.rstdv.monitoringservice.util.TestConnectionProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RequiredArgsConstructor
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@ContextConfiguration(classes = {
+        AuditServiceImpl.class,
+        AuditRepositoryImpl.class,
+        AuditMapperImpl.class,
+        UserRepositoryImpl.class,
+        ThermalMeterMapperImpl.class,
+        UserMapperImpl.class,
+        ThermalMeterReadingRepositoryImpl.class,
+        ThermalMeterReadingServiceImpl.class
+})
 public class ThermalMeterReadingServiceIT extends IntegrationTestBase {
 
-    private UserRepository userRepository;
-    private AuditService auditService;
-    private ThermalMeterMapper thermalMeterMapper;
+    private final UserRepository userRepository;
+    private final AuditService auditService;
+    private final ThermalMeterMapper thermalMeterMapper;
 
-    private UserMapper userMapper;
-    private MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository;
-    private MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> thermalMeterReadingService;
+    private final UserMapper userMapper;
 
-    @BeforeEach
-    void setUp() {
-        connectionProvider = new TestConnectionProvider(
-                container.getJdbcUrl(),
-                container.getUsername(),
-                container.getPassword()
-        );
-        LiquibaseUtil.start(connectionProvider);
-        userRepository = new UserRepositoryImpl(connectionProvider);
-        thermalMeterReadingRepository = new ThermalMeterReadingRepositoryImpl(connectionProvider);
-        thermalMeterMapper = ThermalMeterMapper.INSTANCE;
-        userMapper = UserMapper.INSTANCE;
-        auditService = new AuditServiceImpl(new AuditRepositoryImpl(connectionProvider), AuditMapper.INSTANCE);
-        thermalMeterReadingService = new ThermalMeterReadingServiceImpl(thermalMeterReadingRepository, userRepository, thermalMeterMapper, auditService);
-    }
+    private final AuditMapper auditMapper;
+    private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository;
+    private final MeterReadingService<ReadThermalMeterReadingDto, CreateUpdateThermalMeterReadingDto> thermalMeterReadingService;
 
-    @AfterEach
-    void clear() {
-        LiquibaseUtil.dropAll();
-    }
+//    @BeforeEach
+//    void setUp() {
+//        connectionProvider = new TestConnectionProvider(
+//                container.getJdbcUrl(),
+//                container.getUsername(),
+//                container.getPassword()
+//        );
+//        LiquibaseUtil.start(connectionProvider);
+//        userRepository = new UserRepositoryImpl(connectionProvider);
+//        thermalMeterReadingRepository = new ThermalMeterReadingRepositoryImpl(connectionProvider);
+//
+//        auditService = new AuditServiceImpl(new AuditRepositoryImpl(connectionProvider), auditMapper);
+//        thermalMeterReadingService = new ThermalMeterReadingServiceImpl(thermalMeterReadingRepository, userRepository, thermalMeterMapper, auditService);
+//    }
+//
+//    @AfterEach
+//    void clear() {
+//        LiquibaseUtil.dropAll();
+//    }
 
 
     @DisplayName("save should pass")

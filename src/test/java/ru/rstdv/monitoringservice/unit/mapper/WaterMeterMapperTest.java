@@ -2,25 +2,29 @@ package ru.rstdv.monitoringservice.unit.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
 import ru.rstdv.monitoringservice.mapper.WaterMeterMapper;
+import ru.rstdv.monitoringservice.mapper.WaterMeterMapperImpl;
 
 import java.time.LocalDateTime;
 import java.time.Year;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ContextConfiguration(classes = WaterMeterMapperImpl.class)
+@ExtendWith(SpringExtension.class)
 public class WaterMeterMapperTest {
 
+    @Autowired
     private WaterMeterMapper waterMeterMapper;
 
-    @BeforeEach
-    void setUp() {
-        waterMeterMapper = WaterMeterMapper.INSTANCE;
-    }
 
     @Test
     void toReadWaterMeterReadingDto() {

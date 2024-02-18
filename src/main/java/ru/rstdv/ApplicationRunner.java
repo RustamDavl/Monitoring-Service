@@ -1,14 +1,15 @@
 package ru.rstdv;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.rstdv.monitoringservice.util.CommonConnectionProvider;
-import ru.rstdv.monitoringservice.util.LiquibaseUtil;
+import ru.rstdv.monitoringservice.config.ContextConfiguration;
 
 /**
  * Главный класс приложения.
  */
 public class ApplicationRunner {
     public static void main(String[] args) {
-
-        LiquibaseUtil.start(new CommonConnectionProvider());
+//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ContextConfiguration.class);
+//        context.start();
     }
 }

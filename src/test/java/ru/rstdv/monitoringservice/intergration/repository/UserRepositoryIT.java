@@ -1,15 +1,16 @@
 package ru.rstdv.monitoringservice.intergration.repository;
 
+import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestConstructor;
 import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.embeddable.Address;
 import ru.rstdv.monitoringservice.entity.embeddable.Role;
 import ru.rstdv.monitoringservice.util.IntegrationTestBase;
 import ru.rstdv.monitoringservice.repository.UserRepository;
 import ru.rstdv.monitoringservice.repository.UserRepositoryImpl;
-import ru.rstdv.monitoringservice.util.LiquibaseUtil;
-import ru.rstdv.monitoringservice.util.TestConnectionProvider;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,25 +18,30 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@RequiredArgsConstructor
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
+@ContextConfiguration(classes = {
+        UserRepositoryImpl.class
+})
 public class UserRepositoryIT extends IntegrationTestBase {
-    private UserRepository userRepository;
 
-    @BeforeEach
-    void setUp() {
-        connectionProvider = new TestConnectionProvider(
-                container.getJdbcUrl(),
-                container.getUsername(),
-                container.getPassword()
-        );
-        LiquibaseUtil.start(connectionProvider);
-        userRepository = new UserRepositoryImpl(connectionProvider);
-    }
+    private final UserRepository userRepository;
 
-    @AfterEach
-    void clear() {
-        LiquibaseUtil.dropAll();
-    }
+//    @BeforeEach
+//    void setUp() {
+//        connectionProvider = new TestConnectionProvider(
+//                container.getJdbcUrl(),
+//                container.getUsername(),
+//                container.getPassword()
+//        );
+//        LiquibaseUtil.start(connectionProvider);
+//        userRepository = new UserRepositoryImpl(connectionProvider);
+//    }
+
+//    @AfterEach
+//    void clear() {
+//        LiquibaseUtil.dropAll();
+//    }
 
     @DisplayName("save")
     @Test

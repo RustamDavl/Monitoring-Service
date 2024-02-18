@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static ru.rstdv.monitoringservice.util.UrlPath.*;
 
-@WebFilter("/*")
+//@WebFilter("/*")
 public class AuthorizationFilter implements Filter {
 
     private static final Set<String> PUBLIC_PATH = Set.of(AUTHENTICATION, REGISTRATION, LOGOUT);

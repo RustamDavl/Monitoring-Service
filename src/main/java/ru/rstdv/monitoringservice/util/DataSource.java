@@ -8,6 +8,6 @@ import java.sql.Connection;
  * @author RustamD
  * @version 1.0
  */
-public interface ConnectionProvider {
+public interface DataSource {
     Connection getConnection();
 }

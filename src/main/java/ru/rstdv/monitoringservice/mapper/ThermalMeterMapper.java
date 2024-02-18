@@ -21,10 +21,9 @@ import java.time.Year;
  * @author RustamD
  * @version 1.0
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ThermalMeterMapper {
-
-    ThermalMeterMapper INSTANCE = Mappers.getMapper(ThermalMeterMapper.class);
 
     /**
      * маппит объект типа ThermalMeterReading в ReadThermalMeterReadingDto, который передается пользователю

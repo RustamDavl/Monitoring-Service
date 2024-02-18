@@ -2,23 +2,28 @@ package ru.rstdv.monitoringservice.unit.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.entity.Audit;
 import ru.rstdv.monitoringservice.entity.User;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.mapper.AuditMapper;
+import ru.rstdv.monitoringservice.mapper.AuditMapperImpl;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ContextConfiguration(classes = AuditMapperImpl.class)
+@ExtendWith(SpringExtension.class)
 public class AuditMapperTest {
+
+    @Autowired
     private AuditMapper auditMapper;
 
-    @BeforeEach
-    void setUp() {
-        auditMapper = AuditMapper.INSTANCE;
-    }
 
     @Test
     void toReadAuditDto() {

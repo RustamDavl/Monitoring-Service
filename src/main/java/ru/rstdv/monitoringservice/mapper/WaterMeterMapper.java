@@ -1,9 +1,6 @@
 package ru.rstdv.monitoringservice.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateWaterMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
@@ -22,10 +19,9 @@ import java.time.Year;
  * @author RustamD
  * @version 1.0
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface WaterMeterMapper {
-
-    WaterMeterMapper INSTANCE = Mappers.getMapper(WaterMeterMapper.class);
 
     /**
      * маппит объект типа WaterMeterReading в ReadWaterMeterReadingDto, который передается пользователю

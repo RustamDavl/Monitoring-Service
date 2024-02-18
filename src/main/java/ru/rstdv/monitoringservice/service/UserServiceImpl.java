@@ -2,6 +2,7 @@ package ru.rstdv.monitoringservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.stereotype.Service;
 import ru.rstdv.monitoringservice.aspect.annotation.Auditable;
 import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Loggable
 @RequiredArgsConstructor
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;

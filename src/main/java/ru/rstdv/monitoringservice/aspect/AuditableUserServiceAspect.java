@@ -1,28 +1,27 @@
 package ru.rstdv.monitoringservice.aspect;
 
 
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
-import ru.rstdv.monitoringservice.factory.ServiceFactory;
-import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
 import ru.rstdv.monitoringservice.service.AuditService;
+import ru.rstdv.monitoringservice.service.UserService;
 
 import java.time.LocalDateTime;
 
 @Aspect
+@RequiredArgsConstructor
+@Component
 public class AuditableUserServiceAspect {
 
-    private AuditService auditService;
-    private ServiceFactory serviceFactory;
+    private final AuditService auditService;
+    private final UserService userService;
 
-    public AuditableUserServiceAspect() {
-        serviceFactory = new ServiceFactoryImpl();
-        auditService = serviceFactory.createAuditService();
-    }
 
     @Pointcut("@annotation(ru.rstdv.monitoringservice.aspect.annotation.Auditable) && execution(* ru.rstdv.monitoringservice.service.UserService.register(..))")
     public void annotatedByAuditableOnRegister() {
@@ -51,19 +50,4 @@ public class AuditableUserServiceAspect {
                 "User authenticated successfully"
         ));
     }
-
-//    @Pointcut("execution(* ru.rstdv.monitoringservice.service.UserService.register(..))")
-//    public void registerExecution() {}
-//
-//    @AfterReturning(pointcut = "registerExecution()", returning = "readUserDto")
-//    public void auditRegister(Object readUserDto) {
-//        // Log audit information
-//        auditService.saveAudit(new CreateAuditDto(
-//                ((ReadUserDto) readUserDto).id(),
-//                AuditAction.REGISTRATION.name(),
-//                LocalDateTime.now(),
-//                "User registered successfully"
-//        ));
-//
-//    }
 }

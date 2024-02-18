@@ -1,47 +1,25 @@
 package ru.rstdv.monitoringservice.aspect;
 
 
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
-import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
 import ru.rstdv.monitoringservice.dto.read.ReadWaterMeterReadingDto;
-import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
-import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
-import ru.rstdv.monitoringservice.factory.RepositoryFactory;
-import ru.rstdv.monitoringservice.factory.RepositoryFactoryImpl;
-import ru.rstdv.monitoringservice.factory.ServiceFactory;
-import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
-import ru.rstdv.monitoringservice.mapper.ThermalMeterMapper;
-import ru.rstdv.monitoringservice.mapper.WaterMeterMapper;
-import ru.rstdv.monitoringservice.repository.MeterReadingRepository;
-import ru.rstdv.monitoringservice.repository.UserRepository;
 import ru.rstdv.monitoringservice.service.AuditService;
 
 import java.time.LocalDateTime;
 
 @Aspect
+@Component
+@RequiredArgsConstructor
 public class AuditableWaterMeterReadingServiceAspect {
 
-    private final MeterReadingRepository<WaterMeterReading> waterMeterReadingRepository;
-    private final UserRepository userRepository;
-    private final WaterMeterMapper waterMeterMapper;
     private final AuditService auditService;
-
-    private final ServiceFactory serviceFactory;
-    private final RepositoryFactory repositoryFactory;
-
-    public AuditableWaterMeterReadingServiceAspect() {
-        serviceFactory = new ServiceFactoryImpl();
-        repositoryFactory = new RepositoryFactoryImpl();
-        userRepository = repositoryFactory.createUserRepository();
-        waterMeterMapper = WaterMeterMapper.INSTANCE;
-        waterMeterReadingRepository = repositoryFactory.createWaterMeterReadingRepository();
-        auditService = serviceFactory.createAuditService();
-    }
 
     @Pointcut("@annotation(ru.rstdv.monitoringservice.aspect.annotation.Auditable) && " +
               "execution(* ru.rstdv.monitoringservice.service.WaterMeterReadingServiceImpl.save(..))")

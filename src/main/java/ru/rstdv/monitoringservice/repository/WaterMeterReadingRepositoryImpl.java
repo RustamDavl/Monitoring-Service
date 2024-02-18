@@ -1,19 +1,21 @@
 package ru.rstdv.monitoringservice.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
-import ru.rstdv.monitoringservice.util.ConnectionProvider;
 import ru.rstdv.monitoringservice.entity.WaterMeterReading;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.Year;
 import java.util.*;
 
+@Component
 @RequiredArgsConstructor
 public class WaterMeterReadingRepositoryImpl implements MeterReadingRepository<WaterMeterReading> {
 
-    private final ConnectionProvider connectionProvider;
+    private final DataSource dataSource;
     private static final String SAVE_SQL = """
             INSERT INTO water_meter_reading(user_id, cold_water, hot_water, meter_reading_year, meter_reading_month, meter_reading_day)
             VALUES (?, ?, ?, ?, ?, ?);
@@ -46,7 +48,7 @@ public class WaterMeterReadingRepositoryImpl implements MeterReadingRepository<W
 
     @Override
     public WaterMeterReading save(WaterMeterReading waterMeterReading) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, waterMeterReading.getUserId());
             preparedStatement.setInt(2, waterMeterReading.getColdWater());
@@ -68,7 +70,7 @@ public class WaterMeterReadingRepositoryImpl implements MeterReadingRepository<W
 
     @Override
     public Optional<WaterMeterReading> findActualByUserId(Long id) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ACTUAL_BY_USER_ID_SQL)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -98,7 +100,7 @@ public class WaterMeterReadingRepositoryImpl implements MeterReadingRepository<W
 
     @Override
     public List<WaterMeterReading> findAllByUserId(Long id) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_USER_ID_SQL)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -128,7 +130,7 @@ public class WaterMeterReadingRepositoryImpl implements MeterReadingRepository<W
 
     @Override
     public Optional<WaterMeterReading> findByMonthAndUserId(MonthFilter monthFilter, Long id) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_DATE_AND_USER_ID_SQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.setInt(2, monthFilter.getMonthNumber());
@@ -159,7 +161,7 @@ public class WaterMeterReadingRepositoryImpl implements MeterReadingRepository<W
 
     @Override
     public List<WaterMeterReading> findAll() {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             List<WaterMeterReading> waterMeterReadings = new ArrayList<>();

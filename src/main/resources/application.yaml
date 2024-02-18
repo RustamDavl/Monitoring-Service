@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    password: pass
+    username: rustd
+    url: jdbc:postgresql://localhost:5433/monitoring-service-db
+    dbcp2:
+      default-schema: monitoring_service

@@ -1,22 +1,22 @@
 package ru.rstdv.monitoringservice.repository;
 
 import lombok.RequiredArgsConstructor;
-import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
+import org.springframework.stereotype.Component;
 import ru.rstdv.monitoringservice.dto.filter.MonthFilter;
 import ru.rstdv.monitoringservice.entity.embeddable.MeterReadingDate;
-import ru.rstdv.monitoringservice.util.ConnectionProvider;
 
 
 import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.Year;
 import java.util.*;
-
+@Component
 @RequiredArgsConstructor
 public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository<ThermalMeterReading> {
 
-    private final ConnectionProvider connectionProvider;
+    private final DataSource dataSource;
 
     private static final String SAVE_SQL = """
             INSERT INTO thermal_meter_reading(user_id, giga_calories, meter_reading_year, meter_reading_month, meter_reading_day)
@@ -49,7 +49,7 @@ public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository
             """;
     @Override
     public ThermalMeterReading save(ThermalMeterReading thermalMeterReading) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setLong(1, thermalMeterReading.getUserId());
             preparedStatement.setFloat(2, thermalMeterReading.getGigaCalories());
@@ -70,7 +70,7 @@ public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository
 
     @Override
     public Optional<ThermalMeterReading> findActualByUserId(Long id) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ACTUAL_BY_USER_ID_SQL)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -99,7 +99,7 @@ public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository
 
     @Override
     public List<ThermalMeterReading> findAllByUserId(Long id) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_BY_USER_ID_SQL)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -128,7 +128,7 @@ public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository
 
     @Override
     public Optional<ThermalMeterReading> findByMonthAndUserId(MonthFilter monthFilter, Long id) {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_DATE_AND_USER_ID_SQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.setInt(2, monthFilter.getMonthNumber());
@@ -158,7 +158,7 @@ public class ThermalMeterReadingRepositoryImpl implements MeterReadingRepository
 
     @Override
     public List<ThermalMeterReading> findAll() {
-        try (Connection connection = connectionProvider.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             List<ThermalMeterReading> thermalMeterReadings = new ArrayList<>();

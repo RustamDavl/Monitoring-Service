@@ -1,42 +1,24 @@
 package ru.rstdv.monitoringservice.aspect;
 
 
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.*;
+import org.springframework.stereotype.Component;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.read.ReadThermalMeterReadingDto;
-import ru.rstdv.monitoringservice.entity.ThermalMeterReading;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
-import ru.rstdv.monitoringservice.factory.RepositoryFactory;
-import ru.rstdv.monitoringservice.factory.RepositoryFactoryImpl;
-import ru.rstdv.monitoringservice.factory.ServiceFactory;
-import ru.rstdv.monitoringservice.factory.ServiceFactoryImpl;
-import ru.rstdv.monitoringservice.mapper.ThermalMeterMapper;
-import ru.rstdv.monitoringservice.repository.MeterReadingRepository;
-import ru.rstdv.monitoringservice.repository.UserRepository;
 import ru.rstdv.monitoringservice.service.AuditService;
 
 import java.time.LocalDateTime;
 
 
 @Aspect
+@RequiredArgsConstructor
+@Component
 public class AuditableThermalMeterReadingServiceAspect {
 
-    private final MeterReadingRepository<ThermalMeterReading> thermalMeterReadingRepository;
-    private final UserRepository userRepository;
-    private final ThermalMeterMapper thermalMeterMapper;
     private final AuditService auditService;
 
-    private final ServiceFactory serviceFactory;
-    private final RepositoryFactory repositoryFactory;
-
-    public AuditableThermalMeterReadingServiceAspect() {
-        serviceFactory = new ServiceFactoryImpl();
-        repositoryFactory = new RepositoryFactoryImpl();
-        userRepository = repositoryFactory.createUserRepository();
-        thermalMeterMapper = ThermalMeterMapper.INSTANCE;
-        thermalMeterReadingRepository = repositoryFactory.createThermalMeterReadingRepository();
-        auditService = serviceFactory.createAuditService();
-    }
 
     @Pointcut("@annotation(ru.rstdv.monitoringservice.aspect.annotation.Auditable) && " +
               "execution(* ru.rstdv.monitoringservice.service.ThermalMeterReadingServiceImpl.save(..))")
