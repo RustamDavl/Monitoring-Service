@@ -15,8 +15,8 @@ import static ru.rstdv.monitoringservice.util.UrlPath.*;
 @WebFilter("/*")
 public class AuthorizationFilter implements Filter {
 
-    private static final Set<String> PUBLIC_PATH = Set.of(AUTHENTICATION, REGISTRATION, LOGOUT);
-    private static final Set<String> PUBLIC_PATH_IF_AUTHENTICATED = Set.of(SEND_WATER_METER_READING, SEND_THERMAL_METER_READING);
+    private static final Set<String> PUBLIC_PATH = Set.of(AUTHENTICATION, REGISTRATION, LOGOUT, API_DOCS);
+    private static final Set<String> PUBLIC_PATH_IF_AUTHENTICATED = Set.of(SEND_WATER_METER_READING, SEND_THERMAL_METER_READING, SWAGGER_UI);
     private static final String USER_ATTRIBUTE = "user";
 
     @Override

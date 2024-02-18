@@ -48,6 +48,8 @@ mvn package
 
 | Method   | URI                                                                          | Description                                            |
 |----------|------------------------------------------------------------------------------|--------------------------------------------------------|
+| get      | /monitoring-service/v3/api-docs                                              | api docs (для всех пользователей)                      |
+| get      | /monitoring-service/swagger-ui/index.html                                    | swagger ui (для аутентифицированных пользователей)     |
 | get      | /monitoring-service/api/v1/water-meter-reading/users/{id}?monthValue=value   | поиск показаьтеля счетчика воды пользователя за месяц  |
 | get      | /monitoring-service/api/v1/thermal-meter-reading/users/{id}?monthValue=value | поиск показаьтеля счетчика тепла пользователя за месяц |
 | get      | /monitoring-service/api/v1/users/{id}                                        | отображает конкретного пользователя                    |

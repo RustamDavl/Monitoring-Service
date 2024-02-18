@@ -10,4 +10,6 @@ public class UrlPath {
     public static final String LOGOUT = BASE_PATH + "/users/logout";
     public static final String SEND_WATER_METER_READING = BASE_PATH + "/water-meter-readings";
     public static final String SEND_THERMAL_METER_READING = BASE_PATH + "/thermal-meter-readings";
+    public static final String API_DOCS = "/monitoring-service/v3/api-docs";
+    public static final String SWAGGER_UI = "/monitoring-service/swagger-ui/index.html";
 }
