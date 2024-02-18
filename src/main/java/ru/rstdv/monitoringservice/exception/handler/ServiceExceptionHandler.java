@@ -21,4 +21,10 @@ public class ServiceExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(e.getMessage());
     }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<String> handleEmailRegisteredException(MethodArgumentNotValidException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
 }

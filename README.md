@@ -46,20 +46,20 @@ mvn liquibase:update
 mvn package
 ```
 
-| Method   | URI                                                                   | Description                                            |
-|----------|-----------------------------------------------------------------------|--------------------------------------------------------|
-| get      | /monitoring-service/water-meter-readings?userId=id&monthValue=value   | поиск показаьтеля счетчика воды пользователя за месяц  |
-| get      | /monitoring-service/thermal-meter-readings?userId=id&monthValue=value | поиск показаьтеля счетчика тепла пользователя за месяц |
-| get      | /monitoring-service/users/{id}                                        | отображает конкретного пользователя                    |
-| get      | /monitoring-service/water-meter-readings/all?userId=id                | все показания счетчика воды пользователя               |
-| get      | /monitoring-service/actual-water-meter-readings/all?userId=id         | последнее показание счетчика воды пользователя         |
-| get      | /monitoring-service/actual-water-meter-readings/all?userId=id         | последнее показание счетчика тепла пользователя        |
-| get      | /monitoring-service/thermal-meter-readings/all?userId=id              | все показания счетчика тепла пользователя              |
-| post (1) | /monitoring-service/water-meter-readings                              | отправить показание счетчика воды                      |
-| post (2) | /monitoring-service/thermal-meter-readings                            | отправить показание счетчика тепла                     |
-| post (3) | /monitoring-service/registration                                      | регистрация пользователя                               |
-| post (4) | /monitoring-service/authentication                                    | аутентификация пользователя                            |
-| post     | /monitoring-service/logout                                            | разлогирование пользователя                            |
+| Method   | URI                                                                          | Description                                            |
+|----------|------------------------------------------------------------------------------|--------------------------------------------------------|
+| get      | /monitoring-service/api/v1/water-meter-reading/users/{id}?monthValue=value   | поиск показаьтеля счетчика воды пользователя за месяц  |
+| get      | /monitoring-service/api/v1/thermal-meter-reading/users/{id}?monthValue=value | поиск показаьтеля счетчика тепла пользователя за месяц |
+| get      | /monitoring-service/api/v1/users/{id}                                        | отображает конкретного пользователя                    |
+| get      | /monitoring-service/api/v1/water-meter-readings/all/users/{id}               | все показания счетчика воды пользователя               |
+| get      | /monitoring-service/api/v1/water-meter-readings/actual/users/{id}            | последнее показание счетчика воды пользователя         |
+| get      | /monitoring-service/api/v1/thermal-meter-readings/actual/users/{id}          | последнее показание счетчика тепла пользователя        |
+| get      | /monitoring-service/api/v1/thermal-meter-readings/all/users/{id}             | все показания счетчика тепла пользователя              |
+| post (1) | /monitoring-service/api/v1/water-meter-readings                              | отправить показание счетчика воды                      |
+| post (2) | /monitoring-service/api/v1/thermal-meter-readings                            | отправить показание счетчика тепла                     |
+| post (3) | /monitoring-service/api/v1/users/registration                                | регистрация пользователя                               |
+| post (4) | /monitoring-service/api/v1/users/authentication                              | аутентификация пользователя                            |
+| post     | /monitoring-service/api/v1/users/logout                                      | разлогирование пользователя                            |
 
 Examples of request (1)
 

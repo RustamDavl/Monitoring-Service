@@ -1,5 +1,8 @@
 package ru.rstdv.monitoringservice.dto.createupdate;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 /**
  * класс, представляющий запрос на создание показания счетчика воды
  *
@@ -9,5 +12,11 @@ package ru.rstdv.monitoringservice.dto.createupdate;
  * @author RustamD
  * @version 1.0
  */
-public record CreateUpdateWaterMeterReadingDto(String userId, String coldWater, String hotWater) {
+public record CreateUpdateWaterMeterReadingDto(String userId,
+                                               @NotBlank
+                                               @Pattern(regexp = "\\d{1,5}")
+                                               String coldWater,
+                                               @NotBlank
+                                               @Pattern(regexp = "\\d{1,5}")
+                                               String hotWater) {
 }

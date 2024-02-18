@@ -1,5 +1,6 @@
 package ru.rstdv.monitoringservice.entity.embeddable;
 
+
 /**
  * перечисление, отображающее роль пользователя
  *
@@ -14,5 +15,5 @@ public enum Role {
     /**
      * пользователь с привилегированными правами
      */
-    ADMIN
+    ADMIN;
 }

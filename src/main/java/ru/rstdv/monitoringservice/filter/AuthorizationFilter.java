@@ -12,7 +12,7 @@ import java.util.Set;
 
 import static ru.rstdv.monitoringservice.util.UrlPath.*;
 
-//@WebFilter("/*")
+@WebFilter("/*")
 public class AuthorizationFilter implements Filter {
 
     private static final Set<String> PUBLIC_PATH = Set.of(AUTHENTICATION, REGISTRATION, LOGOUT);
@@ -50,8 +50,8 @@ public class AuthorizationFilter implements Filter {
         if (readUserDto.role().equals(Role.ADMIN.name())) {
             return true;
         }
-        if (!((HttpServletRequest) request).getRequestURI().replaceAll("\\D\\+", "").isEmpty()) {
-            var id = ((HttpServletRequest) request).getRequestURI().replaceAll("\\D+", "");
+        if (!((HttpServletRequest) request).getRequestURI().replaceAll("/monitoring-service/api/v1\\D+", "").isEmpty()) {
+            var id = ((HttpServletRequest) request).getRequestURI().replaceAll("/monitoring-service/api/v1\\D+", "");
             if (((ReadUserDto) ((HttpServletRequest) request).getSession().getAttribute(USER_ATTRIBUTE)).id().equals(id))
                 return true;
         }
@@ -59,7 +59,6 @@ public class AuthorizationFilter implements Filter {
             return request.getParameter("userId").equals(readUserDto.id());
         }
         return false;
-
     }
 
     private boolean isPublicPath(String uri) {

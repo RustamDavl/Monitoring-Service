@@ -10,7 +10,6 @@ import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
 import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.service.AuditService;
-import ru.rstdv.monitoringservice.service.UserService;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +19,6 @@ import java.time.LocalDateTime;
 public class AuditableUserServiceAspect {
 
     private final AuditService auditService;
-    private final UserService userService;
 
 
     @Pointcut("@annotation(ru.rstdv.monitoringservice.aspect.annotation.Auditable) && execution(* ru.rstdv.monitoringservice.service.UserService.register(..))")

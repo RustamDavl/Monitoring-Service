@@ -29,6 +29,11 @@
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.aspectj.version>1.9.20.1</org.aspectj.version>
         <org.springframework.version>6.1.2</org.springframework.version>
+        <org.yaml.version>2.0</org.yaml.version>
+        <com.jayway.jsonpath.version>2.4.0</com.jayway.jsonpath.version>
+        <org.springdoc.version>2.3.0</org.springdoc.version>
+        <org.slf4j.version>2.0.9</org.slf4j.version>
+        <org.hibernate.validator.version>8.0.1.FINAL</org.hibernate.validator.version>
     </properties>
 
     <dependencies>
@@ -150,7 +155,11 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${org.springframework.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -160,34 +169,40 @@
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>2.0</version>
+            <version>${org.yaml.version}</version>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version>2.4.0</version>
+            <version>${com.jayway.jsonpath.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.3.0</version>
+            <version>${org.springdoc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
-            <version>2.3.0</version>
+            <version>${org.springdoc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.9</version>
+            <version>${org.slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>2.0.9</version>
+            <version>${org.slf4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${org.hibernate.validator.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

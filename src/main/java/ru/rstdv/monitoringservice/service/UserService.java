@@ -2,7 +2,6 @@ package ru.rstdv.monitoringservice.service;
 
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
-import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 
 import java.util.List;
 

@@ -1,20 +1,16 @@
 package ru.rstdv.monitoringservice.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import ru.rstdv.monitoringservice.aspect.annotation.Auditable;
 import ru.rstdv.monitoringservice.aspect.annotation.Loggable;
-import ru.rstdv.monitoringservice.dto.createupdate.CreateAuditDto;
 import ru.rstdv.monitoringservice.dto.createupdate.CreateUpdateUserDto;
 import ru.rstdv.monitoringservice.dto.read.ReadUserDto;
-import ru.rstdv.monitoringservice.entity.embeddable.AuditAction;
 import ru.rstdv.monitoringservice.exception.EmailRegisteredException;
 import ru.rstdv.monitoringservice.exception.UserNotFoundException;
 import ru.rstdv.monitoringservice.mapper.UserMapper;
 import ru.rstdv.monitoringservice.repository.UserRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Loggable

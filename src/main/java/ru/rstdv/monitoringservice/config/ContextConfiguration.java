@@ -16,7 +16,6 @@ import javax.sql.DataSource;
 @EnableWebMvc
 @EnableAspectJAutoProxy
 public class ContextConfiguration {
-
     @Bean
     SpringDocConfigProperties springDocConfigProperties() {
         return new SpringDocConfigProperties();

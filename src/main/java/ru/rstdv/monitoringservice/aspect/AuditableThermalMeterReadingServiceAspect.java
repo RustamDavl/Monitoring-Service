@@ -19,7 +19,6 @@ public class AuditableThermalMeterReadingServiceAspect {
 
     private final AuditService auditService;
 
-
     @Pointcut("@annotation(ru.rstdv.monitoringservice.aspect.annotation.Auditable) && " +
               "execution(* ru.rstdv.monitoringservice.service.ThermalMeterReadingServiceImpl.save(..))")
     public void annotatedByAuditableOnSave() {

@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-
+@Loggable
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
